@@ -1,0 +1,5 @@
+django>=6.0,<7
+djangorestframework>=3.15
+django-cors-headers>=4.4
+# SQL Server: pip install mssql-django pyodbc — ต้องติดตั้ง ODBC Driver สำหรับ SQL Server
+# จากนั้นตั้งค่า USE_SQL_SERVER=1 และ DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ร่วมเป็นครอบครัวเดียวกับเรา — สมัครสมาชิก</title>
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e' },
+                        slate: { 50: '#FFFBEB', 100: '#FDF6E3' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .step-inactive { opacity: 0.3; filter: grayscale(1); pointer-events: none; }
+        .step-content { transition: all 0.4s ease; }
+        .hidden { display: none; }
+        body { background-color: #FFFBEB !important; }
+    </style>
+  </head>
+  <body class="bg-slate-50 min-vh-100 flex flex-col">
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-main">PRIMO CLINIC</span>
+        <span class="brand-sub">Pet Care & Wellness</span>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html">หน้าแรก</a>
+        <a href="login.html">เข้าสู่ระบบ</a>
+      </nav>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center py-12 px-4">
+      <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-5 gap-0 bg-white rounded-[40px] shadow-2xl overflow-hidden border border-slate-100">
+        
+        <!-- Sidebar Info -->
+        <div class="md:col-span-2 bg-teal-600 p-10 text-white flex flex-col justify-between relative overflow-hidden">
+             <div class="relative z-10">
+                <h2 class="text-3xl font-black mb-6">ยินดีที่ได้รู้จักครับ!</h2>
+                <p class="opacity-80 mb-8 leading-relaxed">เราขอข้อมูลเพียงเล็กน้อย เพื่อความสะดวกในการติดต่อและนัดหมายน้องๆ ในอนาคต</p>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center"><i class="fas fa-check"></i></div>
+                        <span class="text-sm font-bold">บันทึกประวัติการตรวจ</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center"><i class="fas fa-bell"></i></div>
+                        <span class="text-sm font-bold">แจ้งเตือนนัดหมาย</span>
+                    </div>
+                </div>
+             </div>
+             <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <!-- Form Area -->
+        <div class="md:col-span-3 p-10 md:p-14">
+            <!-- Progress Bar -->
+            <div class="flex items-center justify-between mb-12">
+                <div id="step-dot-1" class="w-10 h-10 rounded-full bg-teal-600 text-white flex items-center justify-center font-black shadow-lg shadow-teal-600/30 transition-all">1</div>
+                <div class="flex-grow h-1 bg-slate-100 mx-4 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-teal-600 transition-all" style="width: 0%"></div>
+                </div>
+                <div id="step-dot-2" class="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-black transition-all">2</div>
+            </div>
+
+            <div id="err" class="bg-red-50 text-red-500 p-5 rounded-3xl text-sm mb-8 hidden"></div>
+            <div id="ok" class="bg-teal-50 text-teal-600 p-5 rounded-3xl text-sm mb-8 hidden"></div>
+
+            <form id="f" class="space-y-6">
+                <!-- Step 1: Personal Info -->
+                <div id="step-1" class="step-content">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">ชื่อ-นามสกุลจริง</label>
+                            <input id="name" type="text" placeholder="ระบุชื่อเพื่อบันทึกประวัติ" required class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:ring-teal-500 font-bold" />
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">เบอร์โทรศัพท์ติดต่อ</label>
+                            <input id="phone" type="tel" placeholder="08x-xxx-xxxx" required class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:ring-teal-500 font-bold" />
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">ที่อยู่ปัจจุบัน</label>
+                            <textarea id="address" placeholder="สำหรับบันทึกประวัติเจ้าของ" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:ring-teal-500 h-24 font-medium"></textarea>
+                        </div>
+                        <button type="button" onclick="goToStep(2)" class="w-full py-5 bg-teal-600 text-white rounded-3xl font-black text-lg hover:bg-teal-700 shadow-xl shadow-teal-600/20 transition-all active:scale-95">
+                            ถัดไป <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Account security -->
+                <div id="step-2" class="step-content hidden">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">อีเมล (ใช้สำหรับเข้าสู่ระบบ)</label>
+                            <input id="email" type="email" placeholder="example@email.com" required class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:ring-teal-500 font-bold" />
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)</label>
+                            <input id="password" type="password" placeholder="••••••••" required minlength="6" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:ring-teal-500 font-bold" />
+                        </div>
+                        <div class="flex gap-4">
+                            <button type="button" onclick="goToStep(1)" class="w-1/3 py-5 bg-slate-100 text-slate-600 rounded-3xl font-black text-lg hover:bg-slate-200 transition-all active:scale-95">
+                                <i class="fas fa-arrow-left"></i> ย้อนกลับ
+                            </button>
+                            <button type="submit" class="w-2/3 py-5 bg-teal-600 text-white rounded-3xl font-black text-lg hover:bg-teal-700 shadow-xl shadow-teal-600/20 transition-all active:scale-95">
+                                สร้างบัญชีผู้ใช้งาน
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+      const f = document.getElementById("f");
+      const err = document.getElementById("err");
+      const ok = document.getElementById("ok");
+
+      function goToStep(num) {
+          const s1 = document.getElementById("step-1");
+          const s2 = document.getElementById("step-2");
+          const d1 = document.getElementById("step-dot-1");
+          const d2 = document.getElementById("step-dot-2");
+          const pb = document.getElementById("progress-bar");
+
+          if (num === 2) {
+              if (!document.getElementById("name").value || !document.getElementById("phone").value) {
+                  alert("กรุณากรอกชื่อและเบอร์โทรศัพท์ก่อนครับ");
+                  return;
+              }
+              s1.classList.add("hidden");
+              s2.classList.remove("hidden");
+              d2.classList.add("bg-teal-600", "text-white", "shadow-lg", "shadow-teal-600/30");
+              d2.classList.remove("bg-slate-100", "text-slate-400");
+              pb.style.width = "100%";
+          } else {
+              s1.classList.remove("hidden");
+              s2.classList.add("hidden");
+              d2.classList.add("bg-slate-100", "text-slate-400");
+              d2.classList.remove("bg-teal-600", "text-white", "shadow-lg", "shadow-teal-600/30");
+              pb.style.width = "0%";
+          }
+      }
+
+      f.onsubmit = async (e) => {
+        e.preventDefault();
+        err.classList.add("hidden");
+        ok.classList.add("hidden");
+        
+        try {
+          const payload = {
+            name: document.getElementById("name").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            password: document.getElementById("password").value,
+            phone: document.getElementById("phone").value.trim(),
+            address: document.getElementById("address").value.trim(),
+            role: "customer"
+          };
+          
+          const data = await VetApi.registerUser(payload);
+          ok.classList.remove("hidden");
+          ok.textContent = "สมัครสมาชิกสำเร็จ! กำลังพาท่านไปหน้าโปรไฟล์...";
+          
+          setTimeout(() => {
+             if (data.role === "vet") window.location.href = "vet-board.html";
+             else if (data.role === "assistant") window.location.href = "assistant-board.html";
+             else window.location.href = "owner-board.html";
+          }, 1500);
+          
+        } catch (x) {
+          err.classList.remove("hidden");
+          err.textContent = x.message || "เกิดข้อผิดพลาดในการสมัครสมาชิก";
+        }
+      };
+    </script>
+  </body>
+</html>

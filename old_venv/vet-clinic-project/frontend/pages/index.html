@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PRIMO CLINIC — ดูแลเพื่อนขนของคุณ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <style>
+        body { font-family: 'Outfit', 'Kanit', sans-serif; background-color: #FFFBEB !important; scroll-behavior: smooth; }
+        .bg-paws { background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M40 50 C40 40, 50 35, 60 40 C65 45, 60 60, 50 60 C40 60, 40 55, 40 50 Z" fill="%23FDBA74" opacity="0.25"/><circle cx="35" cy="35" r="6" fill="%23FDBA74" opacity="0.25"/><circle cx="50" cy="25" r="6" fill="%23FDBA74" opacity="0.25"/><circle cx="65" cy="30" r="6" fill="%23FDBA74" opacity="0.25"/></svg>'); }
+      @keyframes gentle-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+      .animate-gentle {
+        animation: gentle-float 3s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body class="page-home bg-paws">
+    <header class="bg-white/70 backdrop-blur-xl shadow-sm border-b border-white/20 sticky top-0 z-50 px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4 w-full">
+      <div class="flex flex-col items-center md:items-start text-center md:text-left">
+        <span class="text-xl md:text-2xl font-black text-slate-800 flex items-center gap-2"><i class="fas fa-paw text-[#FDBA74]"></i> PRIMO CLINIC</span>
+        <span class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest md:pl-8">Pet Care & Wellness</span>
+      </div>
+      <nav class="flex items-center gap-4 md:gap-6 text-[12px] md:text-sm" id="main-nav">
+        <a href="index.html" class="text-slate-600 font-bold hover:text-[#FDBA74] transition-colors">หน้าแรก</a>
+        <a href="login.html" id="nav-login" class="text-slate-600 font-bold hover:text-[#FDBA74] transition-colors">เข้าสู่ระบบ</a>
+        <a href="register.html" id="nav-register" class="px-4 py-2 md:px-6 md:py-2.5 bg-[#FDBA74] hover:bg-[#C2410C] text-white font-black rounded-full shadow-lg transition-all text-xs md:text-sm">สมัครสมาชิก</a>
+      </nav>
+    </header>
+
+    <!-- Hero: ปรับให้ไม่บังรูปสัตว์ (ใช้ Split Layout ชิดซ้าย) -->
+    <section class="max-w-6xl mx-auto mt-4 md:mt-8 rounded-[32px] md:rounded-[40px] overflow-hidden shadow-2xl relative h-[500px] md:h-[650px] flex items-center" aria-label="ต้อนรับ" style="background: url('https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&q=80&w=1200') 95% center / cover;">
+      <!-- Gradient Overlay: มืดเฉพาะฝั่งซ้ายเพื่อกันตัวหนังสือบังน้องหมาทางขวา -->
+      <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent"></div>
+      
+      <div class="relative z-10 px-8 md:px-16 w-full max-w-2xl text-left">
+            <span class="inline-block bg-[#FDBA74] text-white px-5 py-2 rounded-full font-black tracking-wider mb-6 text-xs md:text-sm uppercase shadow-2xl animate-gentle">
+                <i class="fas fa-sparkles mr-1"></i> ดูแลครบ · จองคิวออนไลน์ 🐾
+            </span>
+            <h2 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight drop-shadow-2xl">
+              สุขภาพดีของน้อง<br /><span class="text-[#FDBA74]">เริ่มที่นี่</span>
+            </h2>
+            <div class="bg-white/5 backdrop-blur-sm border-l-4 border-[#FDBA74] p-4 md:p-6 rounded-r-3xl mb-10 max-w-lg">
+                <p class="text-sm md:text-base text-white/90 font-bold leading-relaxed">
+                  บริการตรวจรักษา ฉีดวัคซีน และให้คำแนะนำโดยทีมสัตวแพทย์มืออาชีพ ด้วยความรักและใส่ใจเหมือนคนในครอบครัว
+                </p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+                <!-- Single Primary Button - ผู้ใช้ทั่วไป -->
+                <a href="owner-board.html" class="px-12 py-5 bg-[#FDBA74] hover:bg-[#C2410C] text-white font-black rounded-full shadow-[0_15px_30px_rgba(253,186,116,0.3)] transform hover:-translate-y-1 active:scale-95 transition-all text-[20px] flex items-center justify-center gap-3">
+                    ผู้ใช้ทั่วไป (ลูกค้าจองคิว) <i class="fas fa-chevron-right text-sm"></i>
+                </a>
+            </div>
+            
+            <div class="mt-8 flex gap-6 text-white text-xs md:text-sm font-black uppercase tracking-widest drop-shadow-md">
+                 <span class="flex items-center gap-2"><i class="fas fa-clock text-[#FDBA74]"></i> 09:00 - 20:00</span>
+                 <span class="flex items-center gap-2"><i class="fas fa-heart text-[#FDBA74]"></i> Professional Care</span>
+            </div>
+      </div>
+    </section>
+
+    <main class="main-home px-4">
+      <section class="clinic-info-grid grid grid-cols-1 md:grid-cols-2 gap-8 my-12 max-w-6xl mx-auto">
+        <!-- Contact Card -->
+        <article class="bg-white/30 backdrop-blur-md p-8 rounded-[32px] shadow-xl border border-white/50 transition-all hover:shadow-2xl hover:-translate-y-1">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 bg-teal-100 rounded-2xl flex items-center justify-center text-teal-600 text-xl">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <h3 class="text-2xl font-black text-slate-800">ติดต่อเรา</h3>
+          </div>
+          <div class="space-y-3 mb-6">
+            <p class="text-slate-500">โทร: <a href="tel:021234567" class="text-teal-600 font-bold hover:underline">02-123-4567</a></p>
+            <p class="text-slate-500">LINE ID: <span class="text-teal-600 font-bold">@115ykjho</span></p>
+          </div>
+          <a href="https://lin.ee/wVIC7dk" target="_blank" class="block w-full text-center py-4 bg-[#06C755] text-white rounded-2xl font-bold hover:brightness-105 transition-all">
+            <i class="fab fa-line mr-2"></i> เพิ่มเพื่อนใน LINE
+          </a>
+        </article>
+
+        <!-- Regulations Card -->
+        <article class="bg-white/30 backdrop-blur-md p-8 rounded-[32px] shadow-xl border border-white/50 transition-all hover:shadow-2xl hover:-translate-y-1">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 bg-teal-100 rounded-2xl flex items-center justify-center text-teal-600 text-xl">
+              <i class="fas fa-clipboard-list"></i>
+            </div>
+            <h3 class="text-2xl font-black text-slate-800">ระเบียบการ</h3>
+          </div>
+          <ul class="text-slate-500 space-y-3">
+            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-teal-500 mt-1"></i> จองล่วงหน้าผ่านทางหน้าเว็บไซต์</li>
+            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-teal-500 mt-1"></i> แจ้งพันธุ์และชื่อน้องให้ชัดเจน</li>
+            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-teal-500 mt-1"></i> มาก่อนเวลานัดหมาย 10-15 นาที</li>
+          </ul>
+        </article>
+
+      </section>
+
+     <section class="reviews-section py-20 bg-white/40 backdrop-blur-lg rounded-[40px] my-12 max-w-7xl mx-auto border border-white/50 shadow-xl relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-[#FDBA74]/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"></div>
+        <div class="px-8 max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">เสียงตอบรับจากเจ้าของสัตว์เลี้ยง <i class="fas fa-heart text-[#FDBA74]"></i></h2>
+                <button onclick="document.getElementById('review-modal').classList.remove('hidden')" class="px-6 py-3 bg-white text-[#C2410C] font-black rounded-full shadow-md hover:scale-105 transition-all outline-none border border-orange-100"><i class="fas fa-pen mr-2"></i> เขียนรีวิวของคุณ</button>
+            </div>
+            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Reviews will be loaded here dynamically by JS -->
+            </div>
+        </div>
+    </section>
+
+    <section class="map-section py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h3 class="text-3xl font-black mb-6">ที่ตั้งและช่องทางติดต่อ</h3>
+                <p class="text-slate-500 mb-8">เราตั้งอยู่ใจกลางเมือง เดินทางสะดวก มีที่จอดรถกว้างขวาง พร้อมเปิดให้บริการทุกวันครับ</p>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-4 text-slate-700">
+                        <div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-map-marker-alt"></i></div>
+                        <span>123 ถนนสุขุมวิท เขตคลองเตย กรุงเทพฯ 10110</span>
+                    </li>
+                    <li class="flex items-center gap-4 text-slate-700">
+                        <div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-phone"></i></div>
+                        <span>02-123-4567</span>
+                    </li>
+                    <li class="flex items-center gap-4 text-slate-700">
+                        <div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fab fa-line"></i></div>
+                        <span>@115ykjho</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="rounded-[40px] overflow-hidden shadow-2xl border-8 border-white h-80">
+                <iframe 
+                    class="w-full h-full border-0" 
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=100.552%2C13.736%2C100.562%2C13.746&amp;layer=mapnik&amp;marker=13.741%2C100.557"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal (Popup) -->
+    <!-- Removed since booking is handled via owner-board.html -->
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-[40px] p-8 max-w-lg w-full shadow-2xl relative">
+            <button onclick="document.getElementById('review-modal').classList.add('hidden')" class="absolute top-6 right-6 text-slate-300 hover:text-red-500 text-2xl transition-colors"><i class="fas fa-times-circle"></i></button>
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-black text-slate-800">เขียนรีวิวความประทับใจ 🐾</h3>
+            </div>
+            <form id="review-f" class="space-y-4">
+                <div class="flex justify-center gap-2 mb-6" id="star-rating">
+                    <i class="fas fa-star text-3xl text-slate-200 cursor-pointer hover:text-yellow-400 transition-colors" data-val="1"></i>
+                    <i class="fas fa-star text-3xl text-slate-200 cursor-pointer hover:text-yellow-400 transition-colors" data-val="2"></i>
+                    <i class="fas fa-star text-3xl text-slate-200 cursor-pointer hover:text-yellow-400 transition-colors" data-val="3"></i>
+                    <i class="fas fa-star text-3xl text-slate-200 cursor-pointer hover:text-yellow-400 transition-colors" data-val="4"></i>
+                    <i class="fas fa-star text-3xl text-slate-200 cursor-pointer hover:text-yellow-400 transition-colors" data-val="5"></i>
+                </div>
+                <!-- Hidden input to store rating -->
+                <input type="hidden" id="rv_stars" value="5" required>
+                <div>
+                    <input id="rv_name" type="text" placeholder="ชื่อของคุณ (เช่น คุณเอ เจ้าของน้องแมว)" required class="w-full rounded-2xl border-slate-100 border-2 p-4 bg-slate-50 focus:ring-[#FDBA74] font-bold" />
+                </div>
+                <div>
+                    <textarea id="rv_text" placeholder="แบ่งปันความประทับใจที่คุณมีต่อคลินิกเรา..." required class="w-full rounded-2xl border-slate-100 border-2 p-4 bg-slate-50 focus:ring-[#FDBA74] h-32"></textarea>
+                </div>
+                <button type="submit" class="w-full py-4 bg-[#FDBA74] text-white rounded-3xl font-black text-xl hover:bg-[#C2410C] shadow-lg shadow-orange-500/20 transition-all active:scale-95">
+                    โพสต์รีวิวเลย!
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e' },
+                        slate: { 50: '#FFFBEB', 100: '#FDF6E3' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+      const form = document.getElementById("booking-f");
+      const errBox = document.getElementById("booking-err");
+      const successBox = document.getElementById("booking-success");
+      const loginNotice = document.getElementById("login-notice");
+
+      (function () {
+        const token = localStorage.getItem("token");
+        const role = localStorage.getItem("role");
+        const nav = document.getElementById("main-nav");
+        const loginBtn = document.getElementById("nav-login");
+        const registerBtn = document.getElementById("nav-register");
+
+        if (token && role && nav) {
+          // Hide login/register if already logged in
+          if (loginBtn) loginBtn.style.display = "none";
+          if (registerBtn) registerBtn.style.display = "none";
+
+          // Add Dashboard and Logout buttons
+          const target = role === "vet" ? "vet-board.html" : role === "assistant" ? "assistant-board.html" : "owner-board.html";
+          const dashLink = document.createElement("a");
+          dashLink.href = target;
+          dashLink.className = "px-6 py-2.5 bg-slate-100 text-slate-700 font-black rounded-full shadow-sm hover:bg-slate-200 transition-all";
+          dashLink.innerHTML = `<i class="fas fa-columns mr-1"></i> ${role === 'customer' ? 'บัญชีของฉัน' : 'ระบบจัดการ'}`;
+          
+          const outLink = document.createElement("a");
+          outLink.href = "#";
+          outLink.className = "px-4 py-2.5 bg-red-50 text-red-500 font-black rounded-full hover:bg-red-500 hover:text-white transition-all shadow-sm";
+          outLink.innerHTML = `<i class="fas fa-sign-out-alt"></i>`;
+          outLink.onclick = (e) => {
+              e.preventDefault();
+              localStorage.clear();
+              window.location.reload();
+          };
+
+          nav.appendChild(dashLink);
+          nav.appendChild(outLink);
+        }
+      })();
+
+      function openBookingModal() { window.location.href = "owner-board.html"; }
+
+      // Review System
+      let selectedStars = 5;
+      const starIcons = document.querySelectorAll('#star-rating i');
+      
+      starIcons.forEach(icon => {
+          icon.addEventListener('click', (e) => {
+              selectedStars = parseInt(e.target.dataset.val);
+              document.getElementById('rv_stars').value = selectedStars;
+              updateStarColors();
+          });
+      });
+
+      function updateStarColors() {
+          starIcons.forEach(icon => {
+              const val = parseInt(icon.dataset.val);
+              if(val <= selectedStars) {
+                  icon.classList.remove('text-slate-200');
+                  icon.classList.add('text-yellow-400');
+              } else {
+                  icon.classList.remove('text-yellow-400');
+                  icon.classList.add('text-slate-200');
+              }
+          });
+      }
+      updateStarColors(); // init default 5 stars
+
+      const defaultReviews = [
+          { name: "คุณวีรพล (เจ้าของน้องกะทิ)", text: "คุณหมอใจดีมากครับ น้องแมวไม่กลัวเลย สถานที่สะอาดและบริการเป็นกันเองสุดๆ แนะนำเลยครับ", stars: 5 },
+          { name: "คุณพรทิพย์ (เจ้าของน้องปุย)", text: "ประทับใจระบบจองคิวมากค่ะ ไม่ต้องไปนั่งรอนานๆ มาถึงตามเวลาก็ได้ตรวจเลย สะดวกมากๆ", stars: 5 },
+          { name: "คุณศิริพงษ์ (เจ้าของน้องโคล่า)", text: "ราคาเป็นธรรม ไม่ยัดเยียดการรักษา คุณหมออธิบายละเอียด เข้าใจง่าย ประทับใจมากค่ะ", stars: 4 }
+      ];
+
+      function renderReviews() {
+          const container = document.getElementById('reviews-container');
+          let savedReviews = JSON.parse(localStorage.getItem('user_reviews') || '[]');
+          const allReviews = [...savedReviews, ...defaultReviews].slice(0, 6); // render max 6
+          
+          container.innerHTML = allReviews.map(r => `
+              <div class="review-card p-8 rounded-3xl bg-white border border-teal-50 shadow-sm hover:shadow-md transition-all h-full flex flex-col scale-in">
+                  <div class="flex text-yellow-400 mb-4 text-sm gap-1">
+                      ${Array(r.stars).fill('<i class="fas fa-star"></i>').join('')}
+                      ${Array(5 - r.stars).fill('<i class="fas fa-star text-slate-200"></i>').join('')}
+                  </div>
+                  <p class="text-slate-600 mb-6 italic leading-relaxed flex-1">"${r.text}"</p>
+                  <div class="font-black text-[#C2410C] border-t border-slate-100 pt-4">${r.name}</div>
+              </div>
+          `).join('');
+      }
+
+      document.getElementById('review-f').onsubmit = (e) => {
+          e.preventDefault();
+          const rName = document.getElementById('rv_name').value;
+          const rText = document.getElementById('rv_text').value;
+          const rStars = parseInt(document.getElementById('rv_stars').value);
+
+          let savedReviews = JSON.parse(localStorage.getItem('user_reviews') || '[]');
+          savedReviews.unshift({ name: rName, text: rText, stars: rStars });
+          localStorage.setItem('user_reviews', JSON.stringify(savedReviews));
+          
+          document.getElementById('review-f').reset();
+          selectedStars = 5;
+          updateStarColors();
+          document.getElementById('review-modal').classList.add('hidden');
+          renderReviews();
+          
+          alert("ขอบคุณสำหรับคำติชมและรีวิวค่ะ! 🐾");
+      };
+
+      // INIT
+      renderReviews();
+    </script>
+
+    <!-- Floating LINE Chat Button -->
+    <a href="https://lin.ee/wVIC7dk" target="_blank" class="fixed bottom-8 right-8 z-[100] bg-[#06C755] text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(6,199,85,0.4)] hover:scale-110 active:scale-95 transition-all group" aria-label="Chat with us on LINE">
+       <i class="fab fa-line text-3xl md:text-4xl"></i>
+       <span class="absolute right-full mr-4 bg-white text-[#06C755] px-4 py-2 rounded-xl text-sm font-black shadow-xl opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all pointer-events-none whitespace-nowrap border border-slate-100">ปรึกษาเราผ่าน LINE 💬</span>
+    </a>
+
+    <footer class="site-footer">
+      PRIMO CLINIC · โปรเจกต์สาธิต Full-Stack · HTML · CSS · JavaScript · Django API
+    </footer>
+  </body>
+</html>

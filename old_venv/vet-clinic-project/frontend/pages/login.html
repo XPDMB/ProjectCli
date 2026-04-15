@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>เข้าสู่ระบบ — PRIMO CLINIC</title>
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lavender: { 50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed' },
+                        peach: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316' },
+                        cream: '#FFFBEB'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            font-family: 'Prompt', sans-serif; 
+            background-color: #FFFBEB !important; 
+            /* ลายอิโมจิสัตว์เลี้ยงจางๆ กระจายตัว */
+            background-image: url('data:image/svg+xml;utf8,<svg width="150" height="150" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><text x="10" y="30" font-size="12" opacity="0.08">🐶</text><text x="60" y="20" font-size="10" opacity="0.05">🦴</text><text x="80" y="50" font-size="12" opacity="0.08">🐱</text><text x="30" y="70" font-size="10" opacity="0.05">🐾</text><text x="70" y="90" font-size="11" opacity="0.06">🦷</text></svg>');
+        }
+        .site-header {
+            background: #a78bfa !important; /* Lavender */
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #ede9fe;
+        }
+        .brand-main { font-weight: 800; font-size: 1.5rem; color: white; }
+        .brand-sub { font-size: 0.75rem; color: #ede9fe; text-transform: uppercase; letter-spacing: 0.1em; display: block; }
+        .nav-links a { color: white; font-weight: 600; margin-left: 1.5rem; background: rgba(255,255,255,0.2); padding: 0.5rem 1.25rem; border-radius: 99px; transition: all 0.3s; }
+        .nav-links a:hover { background: white; color: #8b5cf6; }
+        
+        .login-card {
+            background: white;
+            border-radius: 50px;
+            box-shadow: 0 25px 50px -12px rgba(167, 139, 250, 0.2); /* Lavender Shadow */
+            border: 8px solid white;
+        }
+        input:focus {
+            background-color: white !important;
+            border-color: #a78bfa !important;
+            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.1) !important;
+            outline: none;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body class="min-vh-100 flex flex-col">
+    <header class="site-header shadow-lg">
+      <div class="brand">
+        <span class="brand-main">PRIMO CLINIC</span>
+        <span class="brand-sub">Pet Care & Wellness</span>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html">หน้าแรก</a>
+        <a href="register.html">สมัครสมาชิก</a>
+      </nav>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center py-16 px-4">
+      <div class="max-w-md w-full login-card overflow-hidden p-10 md:p-14 transition-all hover:translate-y-[-5px]">
+          <div class="text-center mb-10">
+              <div class="w-20 h-20 bg-purple-50 text-lavender-400 rounded-[30px] flex items-center justify-center text-3xl mx-auto mb-6 shadow-inner">
+                  <i class="fas fa-paw"></i>
+              </div>
+              <h2 class="text-3xl font-[800] text-slate-800 tracking-tight">🐾 ยินดีต้อนรับกลับมา! 🐱</h2>
+              <p class="text-slate-400 text-sm mt-3 font-medium">โปรดระบุอีเมลและรหัสผ่านเพื่อเข้าสู่ระบบ</p>
+          </div>
+
+          <div id="err" class="bg-red-50 text-red-500 p-5 rounded-3xl text-sm mb-8 hidden border border-red-100"></div>
+
+          <form id="f" class="space-y-6">
+
+            <div class="space-y-2">
+                <label class="block text-[11px] font-black uppercase text-slate-400 ml-2">อีเมลผู้ใช้งาน</label>
+                <input id="email" type="email" placeholder="example@email.com" required class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 transition-all font-bold text-slate-700" />
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-[11px] font-black uppercase text-slate-400 ml-2">รหัสผ่าน</label>
+                <input id="password" type="password" placeholder="••••••••" required class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 transition-all font-bold text-slate-700" />
+            </div>
+
+            <button type="submit" class="w-full py-5 bg-peach-300 text-white rounded-[2rem] font-[800] text-xl hover:bg-peach-400 shadow-xl shadow-peach-300/30 transition-all active:scale-95 flex items-center justify-center gap-3">
+                เข้าสู่ระบบ <i class="fas fa-paw"></i>
+            </button>
+          </form>
+
+          <p class="text-center mt-10 text-slate-400 text-sm font-medium">
+              ยังไม่มีบัญชีใช่ไหม? <a href="register.html" class="text-lavender-400 font-black hover:underline">ลงทะเบียนที่นี่</a>
+          </p>
+
+          <!-- ─── กล่องรหัสทดสอบ ─── -->
+          <div class="mt-8 p-6 rounded-[2rem] border-2 border-dashed border-lavender-200 bg-lavender-50/50">
+              <p class="text-center text-xs font-black uppercase text-lavender-400 tracking-widest mb-4">🔑 บัญชีทดสอบ (Demo)</p>
+              
+              <!-- ลูกค้า -->
+              <div onclick="fillLogin('owner@test.com','pass12345')" 
+                   class="flex items-center gap-4 p-4 rounded-2xl bg-white cursor-pointer mb-3 border border-transparent hover:border-peach-300 hover:shadow-lg hover:shadow-peach-200/30 transition-all active:scale-[0.97] group">
+                  <div class="w-11 h-11 rounded-xl bg-peach-100 flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-110 transition-transform">🐾</div>
+                  <div class="flex-1 min-w-0">
+                      <p class="text-[11px] font-black uppercase text-peach-400">ลูกค้า (Customer)</p>
+                      <p class="text-sm font-bold text-slate-600 truncate">owner@test.com</p>
+                      <p class="text-[10px] text-slate-400 font-medium">รหัส: pass12345</p>
+                  </div>
+                  <div class="text-peach-300 group-hover:text-peach-500 transition-colors">
+                      <i class="fas fa-arrow-right-to-bracket"></i>
+                  </div>
+              </div>
+
+              <!-- สัตวแพทย์ (Admin) -->
+              <div onclick="fillLogin('vet@clinic.test','vet12345')" 
+                   class="flex items-center gap-4 p-4 rounded-2xl bg-white cursor-pointer border border-transparent hover:border-lavender-300 hover:shadow-lg hover:shadow-lavender-200/30 transition-all active:scale-[0.97] group">
+                  <div class="w-11 h-11 rounded-xl bg-lavender-100 flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-110 transition-transform">🩺</div>
+                  <div class="flex-1 min-w-0">
+                      <p class="text-[11px] font-black uppercase text-lavender-400">สัตวแพทย์ (Admin)</p>
+                      <p class="text-sm font-bold text-slate-600 truncate">vet@clinic.test</p>
+                      <p class="text-[10px] text-slate-400 font-medium">รหัส: vet12345</p>
+                  </div>
+                  <div class="text-lavender-300 group-hover:text-lavender-500 transition-colors">
+                      <i class="fas fa-arrow-right-to-bracket"></i>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </main>
+
+    <footer class="p-6 text-center text-slate-400 text-xs mt-auto">
+        &copy; 2026 PRIMO CLINIC — ดูแลด้วยใจ เปรียบเสมือนครอบครัว
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+      // ── ฟังก์ชันกรอกรหัสทดสอบอัตโนมัติ ──
+      function fillLogin(email, password) {
+          const emailInput = document.getElementById("email");
+          const passInput = document.getElementById("password");
+          emailInput.value = email;
+          passInput.value = password;
+          // เอฟเฟกต์ highlight
+          [emailInput, passInput].forEach(el => {
+              el.style.transition = "background 0.3s, border-color 0.3s";
+              el.style.backgroundColor = "#ede9fe";
+              el.style.borderColor = "#a78bfa";
+              setTimeout(() => {
+                  el.style.backgroundColor = "";
+                  el.style.borderColor = "";
+              }, 600);
+          });
+          emailInput.focus();
+      }
+
+      const f = document.getElementById("f");
+      const err = document.getElementById("err");
+
+      f.onsubmit = async (e) => {
+        e.preventDefault();
+        err.classList.add("hidden");
+        
+        try {
+          const data = await VetApi.loginUser({
+            email: document.getElementById("email").value.trim(),
+            password: document.getElementById("password").value,
+          });
+          
+          // Store actual role from data
+          if (data.role) localStorage.setItem("role", data.role);
+          if (data.name) localStorage.setItem("name", data.name);
+
+          setTimeout(() => {
+              if (data.role === "vet") window.location.href = "vet-board.html";
+              else if (data.role === "assistant") window.location.href = "assistant-board.html";
+              else window.location.href = "owner-board.html";
+          }, 800);
+          
+        } catch (x) {
+          err.classList.remove("hidden");
+          err.textContent = x.message || "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+        }
+      };
+    </script>
+  </body>
+</html>

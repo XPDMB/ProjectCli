@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vet Admin Dashboard - PRIMO CLINIC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e' },
+                        slate: { 50: '#FFFBEB', 100: '#FDF6E3' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            background-color: #FFFBEB !important; 
+            /* ลายพื้นหลัง Paws & Bones จางๆ 4% */
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M40 50 C40 40, 50 35, 60 40 C65 45, 60 60, 50 60 C40 60, 40 55, 40 50 Z" fill="%23FDBA74" opacity="0.04"/><circle cx="35" cy="35" r="6" fill="%23FDBA74" opacity="0.04"/><circle cx="50" cy="25" r="6" fill="%23FDBA74" opacity="0.04"/><circle cx="65" cy="30" r="6" fill="%23FDBA74" opacity="0.04"/><path d="M10 80 L30 80 C35 80, 35 70, 30 70 L10 70 C5 70, 5 80, 10 80 Z" fill="%230ea5e9" opacity="0.03" transform="rotate(-15 20 75)"/></svg>');
+        }
+        .sidebar-link.active { 
+            background-color: #FDF6E3; 
+            color: #0284c7; 
+            font-weight: 800;
+            box-shadow: inset -4px 0 0 #0284c7;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.7) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        /* Custom Input Focus Glow */
+        input:focus, textarea:focus, select:focus {
+            background-color: white !important;
+            border-color: #FDBA74 !important;
+            box-shadow: 0 0 0 4px rgba(253, 186, 116, 0.15) !important;
+            outline: none;
+        }
+        .tab-content.hidden { display: none; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-teal-100 hidden md:block sticky top-0 h-screen">
+            <div class="p-8">
+                <h1 class="text-xl font-black text-teal-600 flex items-center gap-2">
+                    <i class="fas fa-hand-holding-heart"></i> PRIMO Admin
+                </h1>
+            </div>
+            <nav class="mt-4 px-4 space-y-2">
+                <button id="btn-overview" onclick="switchTab('overview')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-teal-50 rounded-2xl transition-all active">
+                    <i class="fas fa-paw w-6 text-orange-400"></i> ภาพรวมคลินิก 🐾
+                </button>
+                <button id="btn-queue" onclick="switchTab('queue')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-teal-50 rounded-2xl transition-all">
+                    <i class="fas fa-dog w-6 text-amber-500"></i> คิว & การรักษา 🐶
+                </button>
+                <button id="btn-inventory" onclick="switchTab('inventory')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-teal-50 rounded-2xl transition-all">
+                    <i class="fas fa-cat w-6 text-indigo-400"></i> คลังยา & ต้นทุน 🐱
+                </button>
+                <button id="btn-finance" onclick="switchTab('finance')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-teal-50 rounded-2xl transition-all">
+                    <i class="fas fa-fish w-6 text-rose-400"></i> บัญชีและกำไร 🐟
+                </button>
+                <button id="btn-history" onclick="switchTab('history')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-teal-50 rounded-2xl transition-all">
+                    <i class="fas fa-book-medical w-6 text-sky-400"></i> ประวัติการรักษา
+                </button>
+                <button id="btn-shifts" onclick="switchTab('shifts')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-teal-50 rounded-2xl transition-all">
+                    <i class="fas fa-calendar-check w-6 text-emerald-400"></i> ตารางเวร
+                </button>
+                <button id="btn-sql" onclick="switchTab('sql')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-purple-50 rounded-2xl transition-all font-black mt-4 bg-gradient-to-r from-purple-50 to-transparent border-l-4 border-purple-500 shadow-sm animate-pulse hover:animate-none">
+                    <i class="fas fa-database w-6 text-purple-600"></i> กราฟฐานข้อมูล (SQL)
+                </button>
+                <div class="pt-10 px-4 text-[10px] uppercase font-bold text-slate-300 tracking-widest">External</div>
+                <a href="/admin-board.html" class="w-full flex items-center p-3 text-purple-600 hover:text-purple-800 transition-all text-sm font-black mt-2 bg-purple-50 rounded-xl border border-purple-100">
+                     <i class="fas fa-users-cog w-6"></i> จัดการรายชื่อพนักงาน
+                </a>
+                <a href="/" class="w-full flex items-center p-3 text-slate-400 hover:text-teal-600 transition-all text-sm mt-2">
+                     <i class="fas fa-home w-6"></i> หน้าแรกเว็บไซต์
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <header class="glass-header flex justify-between items-center mb-10 p-6 rounded-[2.5rem] sticky top-4 z-40 shadow-sm border border-white">
+                <h2 id="tab-title" class="text-2xl font-black text-slate-800 tracking-tight">ภาพรวมคลินิกประจำวัน</h2>
+                <div class="flex items-center gap-4">
+                    <div class="flex flex-col text-right">
+                        <span id="user-display" class="text-base font-bold text-teal-700 leading-none">Loading...</span>
+                        <span class="text-[9px] uppercase tracking-widest text-slate-400 font-black mt-1">Veterinarian Admin</span>
+                    </div>
+                    <button onclick="logout()" class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all duration-300">
+                        <i class="fas fa-power-off"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="tab-overview" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm">
+                        <div class="w-10 h-10 bg-teal-50 text-teal-600 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-calendar-day"></i></div>
+                        <div class="text-3xl font-black text-slate-800" id="stat-appt">0</div>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">คิวที่ยังไม่ได้ตรวจ</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm">
+                        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-pills"></i></div>
+                        <div class="text-3xl font-black text-slate-800" id="stat-stock">0</div>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">รายการยาในคลัง</p>
+                    </div>
+                    <div class="bg-teal-900 p-8 rounded-[32px] text-white shadow-xl shadow-teal-900/20">
+                        <div class="text-teal-400 text-xs font-black uppercase mb-2">Today's Revenue</div>
+                        <div class="text-4xl font-black mb-1">฿<span id="brief-rev">0.00</span></div>
+                        <button onclick="switchTab('finance')" class="text-[10px] font-bold text-teal-300 hover:text-white underline">ดูรายงานฉบับเต็ม</button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-sm mb-8">
+                     <h3 class="text-xl font-bold mb-6">เมนูหลักของระบบ (Admin Modules)</h3>
+                     <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 w-full">
+                        <button onclick="switchTab('queue')" class="bg-slate-50 p-6 rounded-3xl text-center font-black text-slate-700 hover:text-teal-600 hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all text-[13px] border-b-4 border-teal-200">
+                            <i class="fas fa-users-cog text-2xl block mb-2 opacity-30"></i> แอดมิน-ประสานงาน
+                        </button>
+                        <button onclick="switchTab('queue')" class="bg-slate-50 p-6 rounded-3xl text-center font-black text-slate-700 hover:text-blue-600 hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all text-[13px] border-b-4 border-blue-200">
+                            <i class="fas fa-user-md text-2xl block mb-2 opacity-30"></i> หมอ-ผู้ช่วย
+                        </button>
+                        <button onclick="switchTab('inventory')" class="bg-slate-50 p-6 rounded-3xl text-center font-black text-slate-700 hover:text-indigo-600 hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all text-[13px] border-b-4 border-indigo-200">
+                            <i class="fas fa-box-open text-2xl block mb-2 opacity-30"></i> คลังสินค้า-ยา-อุปกรณ์
+                        </button>
+                        <button onclick="switchTab('finance')" class="bg-slate-50 p-6 rounded-3xl text-center font-black text-slate-700 hover:text-rose-600 hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all text-[13px] border-b-4 border-rose-200">
+                            <i class="fas fa-file-invoice-dollar text-2xl block mb-2 opacity-30"></i> การเงิน-บัญชี
+                        </button>
+                        <button onclick="switchTab('shifts')" class="bg-slate-50 p-6 rounded-3xl text-center font-black text-slate-700 hover:text-emerald-600 hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all text-[13px] border-b-4 border-emerald-200">
+                            <i class="fas fa-user-clock text-2xl block mb-2 opacity-30"></i> ระบบ HR
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-sm">
+                     <h3 class="text-xl font-bold mb-6">ความเคลื่อนไหวด่วน</h3>
+                     <p class="text-gray-500 text-sm">ระบบจัดการคลินิกพร้อมใช้งาน คุณสามารถจองตารางเวรพนักงาน และตรวจสอบคลังยาได้จากแถบเมนูด้านซ้าย</p>
+                </div>
+            </section>
+
+            <!-- Queue Section -->
+            <section id="tab-queue" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                        <div class="p-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+                            <h3 class="font-bold">รายการนัดหมาย/คิว</h3>
+                            <button onclick="loadAppointments()" class="text-teal-600 hover:rotate-180 transition-transform duration-500"><i class="fas fa-sync-alt"></i></button>
+                        </div>
+                        <table class="w-full">
+                            <tbody id="appt-rows" class="divide-y divide-slate-50 text-sm"></tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="medical-form-container" class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-400 to-blue-500"></div>
+                        <h3 class="text-xl font-bold mb-8 flex items-center gap-3 text-slate-800"><i class="fas fa-notes-medical text-teal-500 text-2xl"></i> บันทึกการตรวจรักษา 🐾</h3>
+                        <form id="med-form" class="space-y-6">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black uppercase text-slate-400 ml-1">ลำดับคิว / สัตว์เลี้ยง</label>
+                                <select id="appt_sel" class="w-full rounded-2xl border-slate-100 p-4 text-sm bg-slate-50 focus:bg-white transition-all" required>
+                                    <option value="">— เลือกคิวที่กำลังตรวจ —</option>
+                                </select>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-black uppercase text-slate-400 ml-1">น้ำหนัก (kg)</label>
+                                    <input type="number" step="0.1" id="weight" placeholder="0.0" class="w-full rounded-2xl border-slate-100 p-4 text-sm bg-slate-50">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-black uppercase text-slate-400 ml-1">อุณหภูมิ (°C)</label>
+                                    <input type="number" step="0.1" id="temperature" placeholder="38.5" class="w-full rounded-2xl border-slate-100 p-4 text-sm bg-slate-50">
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black uppercase text-slate-400 ml-1">อาการที่พบ</label>
+                                <textarea id="symptoms" placeholder="เช่น ซึม ไม่กินข้าว มีไข้..." rows="3" class="w-full rounded-2xl border-slate-100 p-4 text-sm bg-slate-50 transition-all shadow-inner" required></textarea>
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black uppercase text-teal-600 ml-1">สรุปการวินิจฉัย</label>
+                                <textarea id="diagnosis" placeholder="สรุปผลการตรวจรักษา..." rows="2" class="w-full rounded-2xl border-teal-50 p-4 text-sm bg-teal-50/30 transition-all font-bold text-teal-900 shadow-inner" required></textarea>
+                            </div>
+                            
+                            <div class="bg-amber-50/50 p-6 rounded-3xl border border-amber-100">
+                                <label class="block text-[10px] font-black uppercase text-amber-600 mb-2 ml-1"><i class="fas fa-hand-holding-dollar mr-1"></i> ค่าบริการทางการแพทย์</label>
+                                <input type="number" step="0.01" id="exam-fee" placeholder="0.00" class="w-full rounded-2xl border-amber-100 p-4 text-lg focus:ring-amber-500 font-black text-amber-700 bg-white shadow-sm">
+                            </div>
+                            
+                            <div class="border-t border-slate-100 pt-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h4 class="text-xs font-black uppercase text-slate-400 tracking-widest"><i class="fas fa-prescription-bottle-medical mr-2 text-purple-500"></i> สั่งจ่ายยา (PRESCRIPTION)</h4>
+                                    <button type="button" id="add-rx" class="px-3 py-1.5 bg-purple-50 text-purple-600 rounded-xl font-bold text-[10px] hover:bg-purple-600 hover:text-white transition-all"><i class="fas fa-plus mr-1"></i>เพิ่มรายการยา</button>
+                                </div>
+                                <div id="rx-rows" class="space-y-3"></div>
+                            </div>
+
+                            <button type="submit" class="w-full py-5 bg-teal-600 text-white rounded-[2rem] font-black text-lg shadow-xl shadow-teal-600/30 hover:bg-teal-700 hover:-translate-y-1 active:scale-95 transition-all mt-4">
+                                <i class="fas fa-save mr-2"></i> บันทึกประวัติการรักษา
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Inventory Section -->
+            <section id="tab-inventory" class="tab-content hidden">
+                <div class="bg-white rounded-[32px] shadow-sm border border-slate-100 overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b border-slate-100">
+                            <tr>
+                                <th class="p-6">Code</th>
+                                <th class="p-6">Medicine Name</th>
+                                <th class="p-6 text-center">In Stock</th>
+                                <th class="p-6 text-right">Cost Price</th>
+                                <th class="p-6 text-right">Sale Price</th>
+                                <th class="p-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inv-rows" class="divide-y divide-slate-50 text-sm"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Finance Section -->
+            <section id="tab-finance" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <div class="lg:col-span-3">
+                         <div class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100 mb-8">
+                             <h3 class="text-xl font-bold mb-10 flex items-center gap-3">
+                                 <i class="fas fa-money-bill-trend-up text-teal-600 text-2xl"></i> รีพอร์ตผลประกอบการรายสัปดาห์
+                             </h3>
+                             <div class="flex flex-col md:flex-row justify-around items-center py-10 bg-slate-50 rounded-[32px]">
+                                 <div class="text-center group">
+                                     <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-500 transition-colors">Gross Revenue</div>
+                                     <div id="fin-rev" class="text-4xl font-black text-slate-800 tabular-nums">0.00</div>
+                                 </div>
+                                 <i class="fas fa-minus text-slate-200 hidden md:block"></i>
+                                 <div class="text-center group">
+                                     <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-red-500 transition-colors">Expenses (Cogs)</div>
+                                     <div id="fin-cost" class="text-4xl font-black text-slate-800 tabular-nums">0.00</div>
+                                 </div>
+                                 <i class="fas fa-equals text-slate-200 hidden md:block"></i>
+                                 <div class="text-center bg-teal-50 p-8 rounded-3xl border border-teal-100">
+                                     <div class="text-[10px] font-black text-teal-600 uppercase tracking-widest mb-1">Estimated Net Profit</div>
+                                     <div id="fin-profit" class="text-5xl font-black text-teal-600 tabular-nums">0.00</div>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+                    <div>
+                         <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
+                             <h4 class="font-bold text-gray-500 text-xs uppercase mb-6 tracking-widest">ยาที่ขายออกสูงสุด</h4>
+                             <div id="top-meds" class="space-y-4"></div>
+                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shifts Section -->
+            <section id="tab-shifts" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-2xl font-bold text-slate-800">ผู้ปฏิบัติหน้าที่ (Staff Roster)</h3>
+                    <button onclick="document.getElementById('shift-modal').classList.remove('hidden')" class="px-8 py-3 bg-slate-800 text-white rounded-2xl font-bold shadow-xl hover:bg-black transition-all">
+                        <i class="fas fa-plus-circle mr-2"></i> จัดเวรพนักงาน
+                    </button>
+                </div>
+                <div id="shift-manager-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+            </section>
+
+            <!-- History Section -->
+            <section id="tab-history" class="tab-content hidden">
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden p-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="text-2xl font-bold text-slate-800">ฐานข้อมูลประวัติการรักษาทั้งหมด (Medical Records)</h3>
+                        <button onclick="loadGlobalHistory()" class="text-teal-600 hover:rotate-180 transition-transform duration-500"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                <tr>
+                                    <th class="p-5 rounded-tl-2xl">วันที่ตรวจ</th>
+                                    <th class="p-5">สัตว์เลี้ยง</th>
+                                    <th class="p-5">อาการและคำวินิจฉัย</th>
+                                    <th class="p-5 text-right rounded-tr-2xl">ค่ารักษา (บาท)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="global-history-rows" class="divide-y divide-slate-50 text-sm">
+                                <tr><td colspan="4" class="p-10 text-center text-slate-400">กำลังดึงข้อมูล...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+            <!-- SQL Graph Section -->
+            <section id="tab-sql" class="tab-content hidden absolute inset-0 z-50 bg-[#FFFBEB] p-8 overflow-y-auto">
+                <header class="glass-header flex justify-between items-center mb-10 p-6 rounded-[2.5rem] shadow-sm border border-white sticky top-0 z-50">
+                    <h2 class="text-2xl font-black text-purple-700 tracking-tight flex items-center gap-3"><i class="fas fa-database"></i> SQL Server Architecture (SSMS)</h2>
+                    <button onclick="switchTab('overview')" class="px-6 py-2 bg-slate-100 text-slate-700 rounded-full font-bold hover:bg-slate-200 transition-all"><i class="fas fa-times mr-2"></i> ปิดหน้านี้</button>
+                </header>
+
+                <div class="bg-gradient-to-br from-slate-900 to-indigo-950 rounded-[40px] shadow-2xl p-10 text-white relative overflow-hidden max-w-6xl mx-auto border border-white/10">
+                    <!-- Decor -->
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl"></div>
+                    <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl"></div>
+                    
+                    <div class="relative z-10">
+                        <p class="text-indigo-200 mb-8 max-w-3xl leading-relaxed text-lg">
+                            ระบบทำงานเชื่อมต่อกับ <strong>Microsoft SQL Server (SSMS)</strong> ตามโครงสร้าง Relational Database ควบคุมด้วย Foreign Keys และทำงานข้ามตารางอัตโนมัติผ่าน Stored Procedures & Triggers
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+                            <!-- Metric 1 -->
+                            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/10 hover:-translate-y-1 transition-transform">
+                                <div class="text-purple-300 text-[10px] font-black uppercase tracking-widest mb-2"><i class="fas fa-table mr-1"></i> SQL Tables</div>
+                                <div class="text-5xl font-black">7</div>
+                                <div class="text-xs text-indigo-300 mt-2 font-bold">ตารางทั้งหมด</div>
+                            </div>
+                            <!-- Metric 2 -->
+                            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/10 hover:-translate-y-1 transition-transform">
+                                <div class="text-pink-300 text-[10px] font-black uppercase tracking-widest mb-2"><i class="fas fa-bolt mr-1"></i> Live Triggers</div>
+                                <div class="text-5xl font-black">2</div>
+                                <div class="text-xs text-indigo-300 mt-2 font-bold">trg_CompleteAppointment</div>
+                            </div>
+                            <!-- Metric 3 -->
+                            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/10 hover:-translate-y-1 transition-transform">
+                                <div class="text-emerald-300 text-[10px] font-black uppercase tracking-widest mb-2"><i class="fas fa-code mr-1"></i> Procedures</div>
+                                <div class="text-5xl font-black">3</div>
+                                <div class="text-xs text-indigo-300 mt-2 font-bold">sp_UpdateInventory</div>
+                            </div>
+                             <!-- Metric 4 -->
+                            <div class="bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl p-6 border border-white/20 shadow-lg shadow-purple-500/30 flex flex-col justify-center items-center text-center">
+                                <i class="fas fa-server text-3xl mb-2"></i>
+                                <div class="text-sm font-black tracking-wider uppercase">SSMS</div>
+                                <div class="text-xs text-blue-200 mt-1">Status: Conncected Active</div>
+                            </div>
+                        </div>
+
+                        <!-- Graph Box using nested divs -->
+                        <h4 class="text-lg font-black mb-4 text-purple-300 border-b border-white/20 pb-2">Entity-Relationship (ER) Diagram Flow</h4>
+                        <div class="bg-slate-900/60 rounded-[32px] p-10 border border-white/10 overflow-x-auto custom-scrollbar">
+                            <div class="min-w-[800px] flex justify-center gap-6 opacity-95">
+                                <!-- User & Pet -->
+                                <div class="flex flex-col gap-6 w-52">
+                                    <div class="bg-slate-50 text-slate-800 rounded-[20px] p-5 shadow-2xl border-l-[6px] border-blue-500 text-sm">
+                                        <div class="font-black text-blue-700 mb-3 border-b border-slate-200 pb-2"><i class="fas fa-users mr-2 opacity-50"></i> User Table</div>
+                                        <div class="flex items-center gap-2 mb-1"><i class="fas fa-key text-yellow-500 w-4"></i> <span class="font-bold">id</span> (PK)</div>
+                                        <div class="flex items-center gap-2 text-slate-500 pl-6">- username</div>
+                                    </div>
+                                    <div class="text-center text-slate-500"><i class="fas fa-link text-xl bg-slate-800 w-10 h-10 rounded-full leading-[40px] shadow-inner"></i></div>
+                                    <div class="bg-slate-50 text-slate-800 rounded-[20px] p-5 shadow-2xl border-l-[6px] border-teal-500 text-sm">
+                                        <div class="font-black text-teal-700 mb-3 border-b border-slate-200 pb-2"><i class="fas fa-paw mr-2 opacity-50"></i> Pet Table</div>
+                                        <div class="flex items-center gap-2 mb-1"><i class="fas fa-key text-yellow-500 w-4"></i> <span class="font-bold">id</span> (PK)</div>
+                                        <div class="flex items-center gap-2 mb-1 text-teal-600"><i class="fas fa-link w-4"></i> <span class="font-bold">owner_id</span> (FK)</div>
+                                        <div class="flex items-center gap-2 text-slate-500 pl-6">- pet_name</div>
+                                    </div>
+                                </div>
+
+                                <!-- Center Arrow -->
+                                <div class="flex items-center text-blue-400"><i class="fas fa-caret-right text-4xl"></i></div>
+
+                                <!-- Appointment & Record -->
+                                <div class="flex flex-col gap-6 w-60">
+                                    <div class="bg-slate-50 text-slate-800 rounded-[20px] p-5 shadow-2xl border-l-[6px] border-orange-500 text-sm relative">
+                                        <div class="absolute -top-3 -right-3 bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-full shadow-lg animate-bounce">INSERT</div>
+                                        <div class="font-black text-orange-700 mb-3 border-b border-slate-200 pb-2"><i class="far fa-calendar-check mr-2 opacity-50"></i> Appointment Table</div>
+                                        <div class="flex items-center gap-2 mb-1"><i class="fas fa-key text-yellow-500 w-4"></i> <span class="font-bold">id</span> (PK)</div>
+                                        <div class="flex items-center gap-2 mb-1 text-orange-600"><i class="fas fa-link w-4"></i> <span class="font-bold">pet_id</span> (FK)</div>
+                                        <div class="flex items-center gap-2 text-slate-500 pl-6">- status</div>
+                                    </div>
+                                    <div class="text-center text-slate-500"><i class="fas fa-link text-xl bg-slate-800 w-10 h-10 rounded-full leading-[40px] shadow-inner"></i></div>
+                                    <div class="bg-slate-50 text-slate-800 rounded-[20px] p-5 shadow-2xl border-l-[6px] border-purple-500 text-sm">
+                                        <div class="font-black text-purple-700 mb-3 border-b border-slate-200 pb-2"><i class="fas fa-file-medical mr-2 opacity-50"></i> MedicalRecord</div>
+                                        <div class="flex items-center gap-2 mb-1"><i class="fas fa-key text-yellow-500 w-4"></i> <span class="font-bold">id</span> (PK)</div>
+                                        <div class="flex items-center gap-2 mb-1 text-purple-600"><i class="fas fa-link w-4"></i> <span class="font-bold">appt_id</span> (FK)</div>
+                                        <div class="flex items-center gap-2 text-slate-500 pl-6">- diagnosis</div>
+                                    </div>
+                                </div>
+
+                                <!-- Right Arrow -->
+                                <div class="flex items-center text-purple-400"><i class="fas fa-caret-right text-4xl"></i></div>
+
+                                <!-- Inventory & Prescription -->
+                                <div class="flex flex-col gap-6 w-60 justify-end">
+                                    <div class="bg-indigo-900/80 text-teal-300 rounded-[20px] p-5 border border-teal-500/30 text-sm relative overflow-hidden">
+                                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc4JyBoZWlnaHQ9JzgnPgo8cmVjdCB3aWR0aD0nOCcgaGVpZ2h0PSc4JyBmaWxsPScjZmZmJyBmaWxsLW9wYWNpdHk9JzAuMDInLz4KPC9zdmc+')]"></div>
+                                        <div class="relative z-10">
+                                            <div class="font-black text-teal-400 mb-3 border-b border-teal-500/30 pb-2 flex items-center justify-between"><i class="fas fa-bolt"></i> DB Trigger <span class="px-2 py-0.5 bg-teal-500/20 rounded text-[9px]">AUTO</span></div>
+                                            <div class="text-[10px] font-mono leading-tight bg-slate-900/50 p-2 rounded">UPDATE Inventory<br>SET stock -= Qty</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center text-rose-400"><i class="fas fa-arrow-up text-2xl"></i></div>
+                                    <div class="bg-slate-50 text-slate-800 rounded-[20px] p-5 shadow-2xl border-l-[6px] border-rose-500 text-sm relative">
+                                         <div class="absolute -top-3 -right-3 bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-full shadow-lg animate-bounce">INSERT</div>
+                                        <div class="font-black text-rose-700 mb-3 border-b border-slate-200 pb-2"><i class="fas fa-pills mr-2 opacity-50"></i> PrescriptionLine</div>
+                                        <div class="flex items-center gap-2 mb-1"><i class="fas fa-key text-yellow-500 w-4"></i> <span class="font-bold">id</span> (PK)</div>
+                                        <div class="flex items-center gap-2 mb-1 text-rose-600"><i class="fas fa-link w-4"></i> <span class="font-bold">record_id</span> (FK)</div>
+                                        <div class="flex items-center gap-2 mb-1 text-rose-600"><i class="fas fa-link w-4"></i> <span class="font-bold">item_id</span> (FK)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+    </div>
+
+    <!-- Modals -->
+    <div id="history-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-[40px] p-10 max-w-2xl w-full shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-teal-500"></div>
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-3xl font-black text-slate-800">ประมวลผลประวัติ</h3>
+                <button onclick="closeModal('history-modal')" class="text-slate-300 hover:text-red-500 text-2xl transition-colors"><i class="fas fa-circle-xmark"></i></button>
+            </div>
+            <div id="history-list" class="space-y-4 max-h-96 overflow-y-auto pr-2"></div>
+        </div>
+    </div>
+
+    <div id="shift-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-[40px] p-10 max-w-lg w-full shadow-2xl">
+            <h3 class="text-3xl font-black mb-8 text-slate-800">วางแผนตารางเวร</h3>
+            <form id="shift-f" class="space-y-5">
+                <div>
+                    <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">Staff Member</label>
+                    <select id="shift_user" class="w-full rounded-2xl border-slate-200 p-4 focus:ring-teal-500 font-bold text-slate-700 bg-slate-50" required>
+                         <option value="">กำลังดึงรายชื่อพนักงาน...</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">Date</label>
+                        <input type="date" id="shift_date" class="w-full rounded-2xl border-slate-200 p-4 focus:ring-teal-500 font-bold bg-slate-50" required />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                         <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">Start</label>
+                         <input type="time" id="shift_start" class="w-full rounded-2xl border-slate-200 p-4 focus:ring-teal-500 font-bold bg-slate-50" required />
+                    </div>
+                    <div>
+                         <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">End</label>
+                         <input type="time" id="shift_end" class="w-full rounded-2xl border-slate-200 p-4 focus:ring-teal-500 font-bold bg-slate-50" required />
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-5 bg-teal-600 text-white rounded-2xl font-black shadow-xl shadow-teal-600/20 hover:bg-teal-700 transition-all text-lg">บันทึกเข้าสู่ระบบ SQL</button>
+                <button type="button" onclick="closeModal('shift-modal')" class="w-full text-slate-400 text-sm font-bold">ยกเลิก</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        let allAppointments = [];
+        let inventoryList = [];
+        let currentTargetPetId = null;
+
+        (async function init() {
+            const token = localStorage.getItem("token");
+            if (!token) return logout();
+            
+            try {
+                const me = await VetApi.fetchMe();
+                if (!me.profile || me.profile.role !== "vet") {
+                    window.location.href = me.profile && me.profile.role === 'assistant' ? '/assistant-board.html' : '/login.html';
+                    return;
+                }
+                document.getElementById("user-display").textContent = me.profile.display_name || me.username;
+                
+                // Populate staff dropdown directly from our new SQL-connected endpoint
+                const users = await VetApi.fetchStaff();
+                const shiftSelect = document.getElementById('shift_user');
+                shiftSelect.innerHTML = '<option value="">เลือกพนักงาน...</option>' + 
+                    users.filter(u => u.profile && (u.profile.role === 'vet' || u.profile.role === 'assistant'))
+                         .map(u => `<option value="${u.id}">${u.profile.display_name || u.username} (${u.profile.role})</option>`).join('');
+
+            } catch (e) { console.warn("Staff load failed, maybe endpoint restricted"); }
+
+            document.getElementById("add-rx").onclick = addRxRow;
+            document.getElementById("med-form").onsubmit = handleMedSubmit;
+            document.getElementById("shift-f").onsubmit = handleShiftSubmit;
+
+            loadAppointments();
+            loadInventory();
+            updateDailyBrief();
+        })();
+
+        async function loadAppointments() {
+            try {
+                allAppointments = await VetApi.fetchAppointments();
+                const list = document.getElementById('appt-rows');
+                list.innerHTML = allAppointments.map(a => `
+                    <tr class="hover:bg-teal-50 group transition-all cursor-pointer" onclick="selectAppt('${a.id}')">
+                        <td class="p-6 font-black text-teal-600 border-l-4 border-transparent group-hover:border-teal-500">${new Date(a.scheduled_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</td>
+                        <td class="p-6">
+                            <div class="font-bold text-slate-800">${a.pet_name}</div>
+                            <div class="text-[10px] text-slate-400 mb-1">${a.owner_email}</div>
+                            <button onclick="viewPetHistory('${a.pet}', event)" class="text-[10px] font-bold text-teal-600 hover:text-teal-800 transition-colors bg-teal-50 px-2 py-1 rounded-md"><i class="fas fa-history mr-1"></i>ดูประวัติเก่า</button>
+                        </td>
+                        <td class="p-6 text-sm text-slate-500">${a.reason || 'ตรวจทั่วไป'}</td>
+                        <td class="p-6">
+                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
+                                a.status === 'confirmed' ? 'bg-teal-100 text-teal-700' : 'bg-amber-100 text-amber-700'
+                            }">${a.status === 'confirmed' ? 'CONFIRMED' : 'WAITING'}</span>
+                        </td>
+                        <td class="p-6 text-right">
+                            <div class="flex justify-end gap-2">
+                                ${a.status === 'pending' || a.status === 'waiting' ? `<button onclick="confirmAppt('${a.id}', event)" class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all shadow-sm" title="ยืนยันรับคิว"><i class="fas fa-check"></i></button>` : ''}
+                                <button class="w-10 h-10 bg-teal-500 text-white rounded-xl shadow-lg shadow-teal-500/20 hover:bg-teal-600 transition-all" title="บันทึกการรักษา"><i class="fas fa-stethoscope"></i></button>
+                                <button onclick="deleteAppt('${a.id}', event)" class="w-10 h-10 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm" title="ลบข้อมูลจากฐานข้อมูล SQL"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="5" class="p-20 text-center text-slate-300 italic">No appointments today.</td></tr>';
+                document.getElementById('stat-appt').textContent = allAppointments.filter(a => a.status === 'pending').length;
+                
+                const sel = document.getElementById('appt_sel');
+                sel.innerHTML = '<option value="">— เลือกคิวที่กำลังตรวจ —</option>' + 
+                    allAppointments.map(a => `<option value="${a.id}">${a.pet_name} (${new Date(a.scheduled_at).toLocaleTimeString()})</option>`).join('');
+            } catch(e){}
+        }
+
+        async function loadInventory() {
+            try {
+                inventoryList = await VetApi.fetchInventory();
+                document.getElementById('stat-stock').textContent = inventoryList.length;
+                document.getElementById('inv-rows').innerHTML = inventoryList.map(i => `
+                    <tr class="border-b border-slate-50 hover:bg-slate-50/50">
+                        <td class="p-6 font-mono text-xs text-slate-300">#${i.item_code}</td>
+                        <td class="p-6 font-bold text-slate-700">${i.name}</td>
+                        <td class="p-6 text-center">
+                            <span class="${i.stock_quantity < 10 ? 'text-red-500 bg-red-50' : 'text-slate-800 bg-slate-50'} font-black px-3 py-1 rounded-lg">${i.stock_quantity}</span>
+                        </td>
+                        <td class="p-6 text-right text-red-400 font-bold">฿${i.cost_price || '0.00'}</td>
+                        <td class="p-6 text-right text-teal-600 font-black">฿${i.price}</td>
+                        <td class="p-6 text-right">
+                            <button onclick="deleteInv('${i.id}', event)" class="w-8 h-8 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all" title="ลบออกจากฐานข้อมูล SQL">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch(e){}
+        }
+
+        async function loadFinance() {
+            try {
+                const report = await VetApi.fetchFinancialReport(7);
+                document.getElementById('fin-rev').textContent = report.total_revenue.toLocaleString() + ' ฿';
+                document.getElementById('fin-cost').textContent = report.total_cost.toLocaleString() + ' ฿';
+                document.getElementById('fin-profit').textContent = report.net_profit.toLocaleString() + ' ฿';
+                
+                document.getElementById('top-meds').innerHTML = Object.entries(report.medicine_summary).map(([name, data]) => `
+                    <div class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <span class="text-xs font-bold text-slate-700">${name}</span>
+                        <div class="text-right">
+                             <div class="text-xs font-black text-teal-600">${data.rev.toLocaleString()} ฿</div>
+                             <div class="text-[9px] text-slate-400">Vol: ${data.qty}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e){
+                document.getElementById('finance-err').textContent = e.message;
+                document.getElementById('finance-err').classList.remove('hidden');
+            }
+        }
+
+        async function updateDailyBrief() {
+            try {
+                const report = await VetApi.fetchFinancialReport(1);
+                document.getElementById('brief-rev').textContent = report.total_revenue.toLocaleString();
+            } catch(e){}
+        }
+
+        async function loadShifts() {
+            try {
+                const shifts = await VetApi.fetchStaffShifts();
+                document.getElementById('shift-manager-list').innerHTML = shifts.map(s => `
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden">
+                        <div class="absolute top-0 right-0 w-2 h-full bg-teal-50 transition-all group-hover:w-4"></div>
+                        <div class="font-black text-slate-800 mb-1">${s.user_name}</div>
+                        <div class="text-[10px] text-teal-500 font-black uppercase mb-4">${s.role}</div>
+                        <div class="text-xs font-bold text-slate-400"><i class="far fa-clock mr-1"></i> ${s.date}</div>
+                        <div class="text-lg font-black text-slate-700">${s.start_time} - ${s.end_time}</div>
+                    </div>
+                `).join('') || '<div class="col-span-full py-20 text-center text-slate-300">-- ไม่พบข้อมูลตารางเวร --</div>';
+            } catch(e){}
+        }
+
+        async function handleShiftSubmit(e) {
+            e.preventDefault();
+            try {
+                await VetApi.createStaffShift({
+                    user: document.getElementById('shift_user').value,
+                    date: document.getElementById('shift_date').value,
+                    start_time: document.getElementById('shift_start').value,
+                    end_time: document.getElementById('shift_end').value,
+                });
+                alert("บันทึกตารางเวรเสร็จสิ้น!");
+                closeModal('shift-modal');
+                loadShifts();
+            } catch(err) { alert(err.message); }
+        }
+
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.getElementById('tab-' + id).classList.remove('hidden');
+            document.getElementById('btn-' + id).classList.add('active');
+            document.getElementById('tab-title').textContent = {
+                'overview': 'ภาพรวมคลินิกประจำวัน',
+                'queue': 'จัดการคิว & บันทึกการรักษา',
+                'inventory': 'คลังยา & ข้อมูลต้นทุน',
+                'finance': 'รายงานการเงิน & กำไรขาดทุน',
+                'shifts': 'จัดการตารางเวรพนักงาน',
+                'history': 'ระบบสืบค้นประวัติการรักษา',
+                'sql': 'SQL Database Architecture'
+            }[id];
+            
+            if (id === 'finance') loadFinance();
+            if (id === 'shifts') loadShifts();
+            if (id === 'inventory') loadInventory();
+            if (id === 'queue') loadAppointments();
+            if (id === 'history') loadGlobalHistory();
+        }
+
+        async function loadGlobalHistory() {
+            try {
+                const records = await VetApi.fetchMedicalRecords('');
+                const list = document.getElementById('global-history-rows');
+                if(records.length === 0) {
+                    list.innerHTML = '<tr><td colspan="4" class="p-10 text-center text-slate-400 font-bold italic">ไม่พบประวัติการรักษาใดៗ ในระบบ</td></tr>';
+                    return;
+                }
+                list.innerHTML = records.map(r => `
+                    <tr class="hover:bg-slate-50/50 transition-colors">
+                        <td class="p-5">
+                            <div class="text-teal-700 font-black">${new Date(r.created_at).toLocaleDateString()}</div>
+                            <div class="text-[10px] text-slate-400 uppercase font-bold">${new Date(r.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+                        </td>
+                        <td class="p-5 font-black text-slate-800">${r.pet_name}</td>
+                        <td class="p-5">
+                            <div class="text-xs text-slate-600 max-w-sm"><span class="font-bold text-slate-800">อาการ:</span> ${r.symptoms}</div>
+                            <div class="text-xs text-slate-600 max-w-sm mt-1 pb-1 border-b border-slate-100"><span class="font-bold text-slate-800">วินิจฉัย:</span> ${r.diagnosis}</div>
+                            <div class="text-[10px] text-slate-400 mt-1 uppercase font-bold flex gap-2">
+                                ${r.prescription_lines?.map(rx=> `<span><i class="fas fa-pills mr-1"></i>${rx.item_name} x${rx.quantity}</span>`).join('') || 'ไม่มีการจ่ายยา'}
+                            </div>
+                        </td>
+                        <td class="p-5 text-right whitespace-nowrap">
+                            <div class="font-black text-teal-600 text-lg">฿${r.total_amount ? parseFloat(r.total_amount).toLocaleString() : '0'}</div>
+                            <div class="text-[10px] ${r.is_paid ? 'text-teal-500' : 'text-rose-500'} font-black uppercase tracking-widest mt-1 mb-3">${r.is_paid ? 'ชำระแล้ว' : 'ค้างชำระ'}</div>
+                            
+                            <div class="flex flex-col gap-2 items-end">
+                                ${!r.is_paid ? `<button onclick="payBill('${r.id}')" class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white text-[10px] font-bold rounded-lg shadow-lg shadow-rose-500/20 transition-all w-24">รับชำระเงิน</button>` : ''}
+                                <button onclick="printBill('${r.id}')" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg shadow-slate-800/20 transition-all w-24"><i class="fas fa-print mr-1"></i> พิมพ์บิล</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch(e) {
+                document.getElementById('global-history-rows').innerHTML = `<tr><td colspan="4" class="p-10 text-center text-red-500 font-bold"><i class="fas fa-exclamation-triangle"></i> Error: ${e.message}</td></tr>`;
+            }
+        }
+
+        async function payBill(id) {
+            if(!confirm("ยืนยันการรับชำระเงิน?")) return;
+            try {
+                await VetApi.payMedicalRecord(id);
+                // alert("รับชำระเงินเสร็จสิ้น!");
+                loadGlobalHistory();
+            } catch(e) { alert(e.message); }
+        }
+
+        async function printBill(id) {
+            try {
+                const records = await VetApi.fetchMedicalRecords('');
+                const r = records.find(x => String(x.id) === String(id));
+                if(!r) return alert("ไม่พบข้อมูลบิล");
+                
+                const w = window.open('', '_blank');
+                w.document.write(`
+                    <html>
+                    <head>
+                        <title>ใบเสร็จรับเงิน - ${r.pet_name}</title>
+                        <style>
+                            body { font-family: sans-serif; padding: 40px; color: #333; }
+                            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+                            .header h1 { margin: 0; color: #0d9488; }
+                            .details { margin-bottom: 30px; font-size: 14px; }
+                            table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+                            th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+                            .text-right { text-align: right; }
+                            .total-row th, .total-row td { border-top: 2px solid #333; font-size: 18px; font-weight: bold; }
+                        </style>
+                    </head>
+                    <body onload="setTimeout(()=>window.print(), 300)">
+                        <div class="header">
+                            <h1>PRIMO CLINIC</h1>
+                            <p>ใบเสร็จรับเงิน / ใบแจ้งหนี้ (Invoice/Receipt)</p>
+                        </div>
+                        <div class="details">
+                            <p><strong>วันที่:</strong> ${new Date(r.created_at).toLocaleString()}</p>
+                            <p><strong>ชื่อสัตว์เลี้ยง:</strong> ${r.pet_name}</p>
+                            <p><strong>สถานะบิล:</strong> ${r.is_paid ? 'ชำระเงินแล้ว (PAID)' : 'ค้างชำระ (UNPAID)'}</p>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>รายการ (Description)</th>
+                                    <th class="text-right">จำนวน</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ค่าบริการแพทย์/ค่าตรวจรักษา (Medical Exam Fee)</td>
+                                    <td class="text-right">1</td>
+                                </tr>
+                                ${(r.prescription_lines || []).map(rx => `
+                                <tr>
+                                    <td>${rx.item_name}</td>
+                                    <td class="text-right">${rx.quantity} unit</td>
+                                </tr>
+                                `).join('')}
+                                <tr class="total-row">
+                                    <th>ยอดรวมสุทธิ (Grand Total)</th>
+                                    <td class="text-right">฿ ${parseFloat(r.total_amount || 0).toLocaleString()}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="text-align: center; color: #888; font-size: 12px; margin-top: 50px;">
+                            ขอบคุณที่ไว้วางใจให้เราดูแลสัตว์เลี้ยงของคุณ
+                        </div>
+                    </body>
+                    </html>
+                `);
+                w.document.close();
+            } catch(e) { console.error(e); alert(e.message); }
+        }
+
+        // Treatment logic remains similar to previous version but updated for v2
+        function addRxRow() {
+            const container = document.getElementById('rx-rows');
+            const row = document.createElement('div');
+            row.className = "rx-line p-5 bg-slate-50 rounded-2xl border border-slate-100 relative group scale-in";
+            row.innerHTML = `
+                <div class="flex gap-4 mb-3 items-end">
+                    <div class="flex-1">
+                        <label class="text-[10px] font-black uppercase text-slate-400 ml-1">เลือกยา (Medicine)</label>
+                        <select class="rx-inv w-full rounded-2xl border-slate-200 p-3 text-sm focus:ring-[#FDBA74]" required>
+                            <option value="">เลือกยา...</option>
+                            ${inventoryList.map(i => `<option value="${i.id}">${i.name} (${i.stock_quantity}) - ฿${i.price}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="w-1/4">
+                        <label class="text-[10px] font-black uppercase text-orange-500 ml-1">ระบุจำนวน (Qty)</label>
+                        <input type="number" class="rx-qty w-full rounded-2xl border-slate-200 border-2 p-3 text-sm focus:ring-[#FDBA74] text-center font-bold" placeholder="จำนวน" value="1" min="1" required />
+                    </div>
+                </div>
+                <input type="text" class="rx-dosage w-full rounded-2xl border-slate-200 p-3 text-[12px]" placeholder="วิธีใช้ (Dosage Detail)" required />
+                <button type="button" onclick="this.parentElement.remove()" class="absolute -top-3 -right-3 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all shadow-xl hover:scale-110"><i class="fas fa-times"></i></button>
+            `;
+            container.appendChild(row);
+        }
+
+        async function handleMedSubmit(e) {
+            e.preventDefault();
+            const payload = {
+                appointment: document.getElementById('appt_sel').value,
+                weight: document.getElementById('weight').value,
+                temperature: document.getElementById('temperature').value,
+                symptoms: document.getElementById('symptoms').value,
+                diagnosis: document.getElementById('diagnosis').value,
+                exam_fee: document.getElementById('exam-fee').value || 0,
+                prescription_lines: []
+            };
+            document.querySelectorAll('.rx-line').forEach(row => {
+                payload.prescription_lines.push({
+                    inventory_item: row.querySelector('.rx-inv').value,
+                    quantity: row.querySelector('.rx-qty').value,
+                    dosage: row.querySelector('.rx-dosage').value
+                });
+            });
+            try {
+                await VetApi.createMedicalRecord(payload);
+                alert("บันทึกการรักษาสำเร็จ! ข้อมูลสต็อกถูกตัดออก และประวัติถูกบันทึกลง SQL เรียบร้อย");
+                location.reload();
+            } catch(err) { alert(err.message); }
+        }
+
+        function selectAppt(id) {
+            const sel = document.getElementById('appt_sel');
+            sel.value = id;
+            switchTab('queue');
+            document.getElementById('med-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function confirmAppt(id, event) {
+            if(event) event.stopPropagation();
+            if(!confirm("ยืนยันรับคิวนี้หรือไม่? สถานะจะถูกเปลี่ยนเป็น CONFIRMED ให้ลูกค้าเห็น")) return;
+            try {
+                await VetApi.confirmAppointment(id);
+                loadAppointments();
+            } catch(e) {
+                alert("เกิดข้อผิดพลาดในการยืนยันคิว: " + e.message);
+            }
+        }
+
+        async function deleteAppt(id, event) {
+            if(event) event.stopPropagation();
+            if(!confirm("⚠️ ยืนยันการลบคิวนี้? ข้อมูลจะถูกลบออกจากฐานข้อมูล SQL อย่างถาวร")) return;
+            try {
+                await VetApi.deleteAppointment(id);
+                loadAppointments();
+            } catch(e) {
+                alert("เกิดข้อผิดพลาดในการลบ: " + e.message);
+            }
+        }
+
+        async function viewPetHistory(petId, event) {
+            if(event) event.stopPropagation();
+            openModal('history-modal');
+            const list = document.getElementById('history-list');
+            list.innerHTML = '<div class="text-center py-10 text-slate-400"><i class="fas fa-spinner fa-spin text-2xl"></i> กำลังดึงประวัติการรักษา...</div>';
+            
+            try {
+                const records = await VetApi.fetchMedicalRecords('pet_id=' + petId);
+                if(records.length === 0) {
+                    list.innerHTML = '<div class="text-center py-10 text-slate-400 italic font-bold">ไม่พบประวัติการรักษาของสัตว์เลี้ยงตัวนี้ในระบบ</div>';
+                    return;
+                }
+                list.innerHTML = records.map(r => `
+                    <div class="bg-slate-50 p-5 rounded-3xl border border-slate-100 hover:border-teal-300 transition-colors">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="font-black text-teal-800"><i class="far fa-calendar-check mr-1 text-teal-500"></i> ${new Date(r.created_at).toLocaleString()}</div>
+                            <span class="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${r.is_paid ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${r.is_paid ? 'ชำระเงินแล้ว' : 'ค้างชำระ'}</span>
+                        </div>
+                        <div class="text-sm text-slate-600 mb-2 leading-relaxed"><strong>อาการ:</strong> ${r.symptoms}</div>
+                        <div class="text-sm text-slate-600 mb-3 leading-relaxed"><strong>วินิจฉัย:</strong> ${r.diagnosis}</div>
+                        ${r.prescription_lines && r.prescription_lines.length > 0 ? `
+                        <div class="border-t border-slate-200 pt-3 mt-3">
+                            <div class="text-[10px] uppercase font-black text-slate-400 tracking-widest mb-2"><i class="fas fa-pills mr-1"></i> จ่ายยา</div>
+                            <ul class="space-y-1 text-sm text-slate-600">
+                                ${r.prescription_lines.map(rx => `<li>• ${rx.item_name} <span class="font-bold text-teal-600">(x${rx.quantity})</span> - <span class="italic">${rx.dosage}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                        ` : ''}
+                    </div>
+                `).join('<div class="h-4"></div>');
+            } catch(e) {
+                list.innerHTML = '<div class="text-center py-10 text-red-500 bg-red-50 rounded-2xl"><i class="fas fa-exclamation-circle text-xl mb-2"></i><br>ระบบเกิดข้อผิดพลาดในการดึงข้อมูล</div>';
+            }
+        }
+
+        async function deleteInv(id, event) {
+            if(event) event.stopPropagation();
+            if(!confirm("⚠️ ยืนยันการลบยา/สินค้านี้? ข้อมูลนี้จะหายไปจากคลัง SQL อย่างถาวรแบบกู้คืนไม่ได้")) return;
+            try {
+                await VetApi.deleteInventory(id);
+                loadInventory();
+            } catch(e) {
+                alert("เกิดข้อผิดพลาดในการลบสินค้านี้: " + e.message);
+            }
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function logout() { localStorage.clear(); window.location.href = '/login.html'; }
+        window.closeHistory = () => closeModal('history-modal');
+    </script>
+</body>
+</html>

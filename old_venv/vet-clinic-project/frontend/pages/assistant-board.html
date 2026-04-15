@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard ผู้ช่วยสัตวแพทย์ - PRIMO CLINIC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #f8fafc; }
+        .sidebar-link.active { background-color: #ebf5ff; border-right: 4px solid #3b82f6; color: #1e40af; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-slate-200 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-xl font-bold text-blue-600"><i class="fas fa-paw mr-2"></i>Assistant Portal</h1>
+            </div>
+            <nav class="mt-4 px-4 space-y-2">
+                <button id="btn-queue" onclick="switchTab('queue')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-slate-50 rounded-lg transition-all active">
+                    <i class="fas fa-list-ol w-6"></i> คิววันนี้
+                </button>
+                <button id="btn-patients" onclick="switchTab('patients')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-slate-50 rounded-lg transition-all">
+                    <i class="fas fa-dog w-6"></i> ลงทะเบียนเจ้าของสัตว์
+                </button>
+                <button id="btn-inventory" onclick="switchTab('inventory')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-slate-50 rounded-lg transition-all">
+                    <i class="fas fa-pills w-6"></i> คลังยา
+                </button>
+                <button id="btn-schedule" onclick="switchTab('schedule')" class="sidebar-link w-full flex items-center p-3 text-slate-600 hover:bg-slate-50 rounded-lg transition-all">
+                    <i class="fas fa-calendar-alt w-6"></i> ตารางเวร
+                </button>
+                <a href="index.html" class="w-full flex items-center p-3 text-slate-400 hover:text-blue-500 transition-all text-sm mt-8">
+                     <i class="fas fa-home w-6"></i> กลับหน้าหลัก
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <header class="flex justify-between items-center mb-8">
+                <h2 id="tab-title" class="text-2xl font-bold text-slate-800">การจัดการคิว & การจ่ายเงิน</h2>
+                <div class="flex items-center gap-4">
+                    <span id="user-display" class="bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-medium">Loading...</span>
+                    <button onclick="logout()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+
+            <!-- Queue Tab -->
+            <section id="tab-queue" class="tab-content transition-all duration-300">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-8">
+                     <h3 class="text-xl font-bold mb-6">เมนูหลักของระบบ (System Modules)</h3>
+                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full">
+                        <button onclick="switchTab('queue')" class="bg-slate-50 p-6 rounded-2xl text-center font-bold text-slate-700 hover:text-blue-600 hover:bg-white hover:shadow-lg hover:-translate-y-1 transition-all text-[13px] border-b-4 border-blue-200">
+                            <i class="fas fa-users-cog text-2xl block mb-2 opacity-30"></i> แอดมิน-ประสานงาน
+                        </button>
+                        <button onclick="switchTab('queue')" class="bg-slate-50 p-6 rounded-2xl text-center font-bold text-slate-700 hover:text-blue-600 hover:bg-white hover:shadow-lg hover:-translate-y-1 transition-all text-[13px] border-b-4 border-blue-200">
+                            <i class="fas fa-user-md text-2xl block mb-2 opacity-30"></i> หมอ-ผู้ช่วย
+                        </button>
+                        <button onclick="switchTab('inventory')" class="bg-slate-50 p-6 rounded-2xl text-center font-bold text-slate-700 hover:text-indigo-600 hover:bg-white hover:shadow-lg hover:-translate-y-1 transition-all text-[13px] border-b-4 border-indigo-200">
+                            <i class="fas fa-box-open text-2xl block mb-2 opacity-30"></i> คลังสินค้า/ยา
+                        </button>
+                        <button onclick="switchTab('schedule')" class="bg-slate-50 p-6 rounded-2xl text-center font-bold text-slate-700 hover:text-emerald-600 hover:bg-white hover:shadow-lg hover:-translate-y-1 transition-all text-[13px] border-b-4 border-emerald-200">
+                            <i class="fas fa-user-clock text-2xl block mb-2 opacity-30"></i> ระบบ HR/ตารางเวร
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="p-4 font-semibold text-slate-600">เวลา</th>
+                                <th class="p-4 font-semibold text-slate-600">สัตว์เลี้ยง (เจ้าของ)</th>
+                                <th class="p-4 font-semibold text-slate-600">สาเหตุการมา</th>
+                                <th class="p-4 font-semibold text-slate-600">สถานะ</th>
+                                <th class="p-4 font-semibold text-slate-600">ธุรกรรม</th>
+                            </tr>
+                        </thead>
+                        <tbody id="queue-list"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Inventory Tab (View Only) -->
+            <section id="tab-inventory" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="inventory-grid"></div>
+            </section>
+
+             <!-- Patients Tab -->
+             <section id="tab-patients" class="tab-content hidden">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 max-w-2xl mx-auto">
+                    <h3 class="text-xl font-bold mb-6">ลงทะเบียนประวัติสัตว์เลี้ยง/เจ้าของใหม่</h3>
+                    <form id="patient-f" class="space-y-4">
+                        <input type="text" placeholder="ชื่อสัตว์เลี้ยง" id="new_pet_name" class="w-full rounded-xl border-gray-200 p-3" required />
+                        <input type="text" placeholder="สายพันธุ์" id="new_pet_breed" class="w-full rounded-xl border-gray-200 p-3" required />
+                        <input type="email" placeholder="อีเมลเจ้าของ (สำหรับค้นหา/เชื่อมโยง)" id="owner_email" class="w-full rounded-xl border-gray-200 p-3" required />
+                        <button type="submit" class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold">บันทึกข้อมูล</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Schedule Tab -->
+            <section id="tab-schedule" class="tab-content hidden">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200" id="schedule-container">
+                    <div class="flex justify-between items-center mb-6">
+                         <h3 class="font-bold text-xl">ตารางพนักงานสัปดาห์นี้</h3>
+                         <button onclick="showUpdateShiftModal()" class="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm">อัปเดตตารางเวร</button>
+                    </div>
+                    <div id="shift-list" class="space-y-3"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Billing Modal -->
+    <div id="pay-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl scale-in transform transition-all">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-slate-800">ใบแจ้งชำระเงิน</h3>
+                <i class="fas fa-receipt text-3xl text-blue-500 opacity-20"></i>
+            </div>
+            <div id="bill-details" class="space-y-3 mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100"></div>
+            <div class="flex justify-between items-center mb-8 px-2">
+                <span class="text-slate-500 font-medium">ยอดเงินรวมทั้งสิ้น</span>
+                <span id="bill-sum" class="text-2xl font-black text-blue-600 underline decoration-blue-200">0.00 ฿</span>
+            </div>
+            <button onclick="confirmPayment()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg hover:bg-blue-700 active:scale-95 transition-all text-lg">
+                ยืนยันการชำระเงิน (Paid)
+            </button>
+            <button onclick="closeModal('pay-modal')" class="w-full mt-4 text-slate-400 hover:text-slate-600 text-sm">ยกเลิก/ปิดหน้าต่าง</button>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        let currentRecordId = null;
+
+        async function init() {
+            const role = localStorage.getItem('role');
+            if (role !== 'assistant' && role !== 'vet') {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('user-display').textContent = `สวัสดึคุณ ${localStorage.getItem('name')} (${role === 'assistant' ? 'ผู้ช่วย' : 'หมอ'})`;
+            switchTab('queue');
+        }
+
+        async function loadQueue() {
+            try {
+                const appts = await VetApi.fetchAppointments({ today: 1 });
+                const list = document.getElementById('queue-list');
+                const records = await VetApi.fetchMedicalRecords();
+
+                list.innerHTML = appts.map(a => {
+                    const record = records.find(r => r.appointment == a.id);
+                    const isPaid = record && record.is_paid;
+                    const canBill = record && !isPaid;
+
+                    return `
+                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                        <td class="p-4 text-blue-600 font-medium">${new Date(a.scheduled_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} น.</td>
+                        <td class="p-4">
+                            <div class="font-bold">${a.pet_name}</div>
+                            <div class="text-xs text-slate-400 font-mono underline">${a.owner_email}</div>
+                        </td>
+                        <td class="p-4 text-slate-600 italic">"${a.reason || 'ตรวจทั่วไป'}"</td>
+                        <td class="p-4">
+                            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                                isPaid ? 'bg-green-100 text-green-700' : (record ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-400')
+                            }">
+                                ${isPaid ? 'จ่ายแล้ว' : (record ? 'รอชำระ' : 'รอรับตรวจ')}
+                            </span>
+                        </td>
+                        <td class="p-4">
+                             ${canBill ? 
+                                `<button onclick="showBilling('${record.id}')" class="px-4 py-1.5 bg-blue-500 text-white rounded-lg text-xs font-bold hover:bg-blue-600">จัดการบิล</button>` : 
+                                (isPaid ? `<span class="text-green-500"><i class="fas fa-check-circle"></i> เสร็จสิ้น</span>` : `<span class="text-slate-300">รอยืนยันประวัติ</span>`)
+                             }
+                        </td>
+                    </tr>
+                `; }).join('') || '<tr><td colspan="5" class="p-12 text-center text-slate-400 italic">ไม่มีคิวที่รอดำเนินการในขณะนี้</td></tr>';
+            } catch (err) { console.error(err); }
+        }
+
+        async function showBilling(recordId) {
+            try {
+                const records = await VetApi.fetchMedicalRecords();
+                const record = records.find(r => r.id == recordId);
+                if (!record) return;
+
+                currentRecordId = recordId;
+                document.getElementById('bill-sum').textContent = `${record.total_amount} ฿`;
+                document.getElementById('bill-details').innerHTML = `
+                    <div class="text-blue-600 font-bold border-b pb-2 mb-2 italic">PET: ${record.pet_name}</div>
+                    ${record.prescription_lines.map(l => `
+                        <div class="flex justify-between text-sm py-1 border-b border-dashed border-slate-200 last:border-0">
+                            <span class="text-slate-600">${l.item_name} <span class="text-[10px] text-slate-400">x${l.quantity}</span></span>
+                            <span class="font-mono">${l.unit_price * l.quantity} ฿</span>
+                        </div>
+                    `).join('')}
+                    ${record.prescription_lines.length === 0 ? '<div class="text-slate-400 text-xs italic">ไม่มีรายการยาเพิ่มเติม</div>' : ''}
+                `;
+                document.getElementById('pay-modal').classList.remove('hidden');
+            } catch (err) { alert("ข้อมูลบิลผิดพลาด: " + err.message); }
+        }
+
+        async function confirmPayment() {
+            if (!currentRecordId) return;
+            try {
+                await VetApi.apiFetch(`/medical-records/${currentRecordId}/pay/`, { method: 'POST' });
+                alert("บันทึกการรับเงินเรียบร้อยแล้ว");
+                closeModal('pay-modal');
+                loadQueue();
+            } catch (err) { alert(err.message); }
+        }
+
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(`tab-${id}`).classList.remove('hidden');
+            document.getElementById(`btn-${id}`).classList.add('active');
+            document.getElementById('tab-title').textContent = {
+                'queue': 'การจัดการคิว & การจ่ายเงิน',
+                'patients': 'ลงทะเบียนประวัติใหม่',
+                'inventory': 'รายการยาและสต็อกคงเหลือ',
+                'schedule': 'ตารางปฏิบัติหน้าที่'
+            }[id];
+            
+            if (id === 'queue') loadQueue();
+            if (id === 'inventory') loadInventory();
+            if (id === 'schedule') loadSchedule();
+        }
+
+        async function loadInventory() {
+            const items = await VetApi.fetchInventory();
+            const grid = document.getElementById('inventory-grid');
+            grid.innerHTML = items.map(i => `
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="text-[10px] font-mono text-slate-400 mb-1">#CODE-${i.item_code}</div>
+                    <h4 class="font-bold text-slate-800 mb-4 h-12 overflow-hidden">${i.name}</h4>
+                    <div class="flex justify-between items-end border-t pt-4">
+                        <div>
+                            <div class="text-xs text-slate-400">ราคาขาย</div>
+                            <div class="text-blue-600 font-black text-xl">${i.price} ฿</div>
+                        </div>
+                        <div class="text-right">
+                             <div class="text-[10px] text-slate-400">ในสต็อกคงเหลือ</div>
+                             <div class="${i.stock_quantity <= 5 ? 'text-red-500 font-black' : 'text-slate-800 font-bold'} text-lg">${i.stock_quantity}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadSchedule() {
+            try {
+                const shifts = await VetApi.apiFetch('/staff-shifts/');
+                const list = document.getElementById('shift-list');
+            list.innerHTML = shifts.map(s => `
+                <div class="flex justify-between items-center bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:border-blue-200">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 font-bold">
+                            ${s.user_name[0]}
+                        </div>
+                        <div>
+                            <div class="font-bold text-slate-800">${s.user_name} <span class="text-[10px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded uppercase font-black">${s.role}</span></div>
+                            <div class="text-xs text-slate-400"><i class="far fa-clock mr-1"></i> ${s.date} ${s.start_time} - ${s.end_time}</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-slate-500 italic bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">${s.notes || '-- ไม่มีบันทึก --'}</div>
+                </div>
+            `).join('') || '<div class="text-center py-20 text-slate-300 italic">ยังไม่มีตารางเวรที่ประกาศ</div>';
+            } catch (e) {}
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+
+        init();
+    </script>
+</body>
+</html>
