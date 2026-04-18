@@ -236,11 +236,19 @@
             if (id === 'schedule') loadSchedule();
         }
 
+        let allInventory = [];
+
         async function loadInventory() {
-            const items = await VetApi.fetchInventory();
+            try {
+                allInventory = await VetApi.fetchInventory();
+                renderInventory(allInventory);
+            } catch (err) { console.error(err); }
+        }
+
+        function renderInventory(items) {
             const grid = document.getElementById('inventory-grid');
             grid.innerHTML = items.map(i => `
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 transition-all">
                     <div class="text-[10px] font-mono text-slate-400 mb-1">#CODE-${i.item_code}</div>
                     <h4 class="font-bold text-slate-800 mb-4 h-12 overflow-hidden">${i.name}</h4>
                     <div class="flex justify-between items-end border-t pt-4">
@@ -254,7 +262,15 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `).join('') || '<div class="col-span-full py-20 text-center text-slate-400 italic font-bold">ไม่พบข้อมูลยาในคลัง</div>';
+        }
+
+        function filterInventory() {
+            const query = document.getElementById('inv-search-input').value.toLowerCase().trim();
+            const filtered = allInventory.filter(i => 
+                i.name.toLowerCase().includes(query) || i.item_code.toLowerCase().includes(query)
+            );
+            renderInventory(filtered);
         }
 
         async function loadSchedule() {
