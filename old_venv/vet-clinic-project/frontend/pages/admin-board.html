@@ -48,13 +48,9 @@
                 <p class="text-xs text-slate-400 mt-2 font-bold tracking-widest uppercase">System Management</p>
             </div>
             <nav class="mt-4 px-4 space-y-2">
-                <button onclick="switchTab('users')" id="btn-users"
-                    class="tab-btn w-full flex items-center p-3 bg-brand-600 text-white rounded-2xl transition-all shadow-lg shadow-brand-500/30">
+                <button
+                    class="w-full flex items-center p-3 bg-brand-600 text-white rounded-2xl transition-all shadow-lg shadow-brand-500/30">
                     <i class="fas fa-users-cog w-6"></i> รายชื่อพนักงาน/สมาชิก
-                </button>
-                <button onclick="switchTab('medicines')" id="btn-medicines"
-                    class="tab-btn w-full flex items-center p-3 text-slate-400 hover:text-white rounded-xl transition-all hover:bg-white/5 text-sm">
-                    <i class="fas fa-pills w-6"></i> จัดการคลังยา
                 </button>
                 <div class="pt-10 px-4 text-[10px] uppercase font-bold text-slate-500 tracking-widest">Navigation</div>
                 <a href="/vet-board.html"
@@ -111,78 +107,38 @@
                 </div>
             </div>
 
-            <!-- Users Tab -->
-            <div id="tab-users" class="tab-content">
-                <div class="bg-white rounded-[40px] border border-slate-100 shadow-sm overflow-hidden p-8">
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-                        <h3 class="text-xl font-bold flex items-center gap-3 text-slate-800"><i
-                                class="fas fa-address-book text-brand-500"></i> รายชื่อผู้ใช้งานในระบบ</h3>
-                        <div class="relative w-full md:w-80 group">
-                            <i
-                                class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
-                            <input type="text" id="search-input" placeholder="ค้นหาชื่อ หรืออีเมล..."
-                                class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 transition-all font-medium text-sm"
-                                oninput="filterUsers()">
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead
-                                class="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 font-bold border-b border-slate-100">
-                                <tr>
-                                    <th class="p-5 rounded-tl-2xl">ID</th>
-                                    <th class="p-5">อีเมล / ข้อมูลผู้ใช้</th>
-                                    <th class="p-5">ชื่อ-นามสกุล</th>
-                                    <th class="p-5">ตำแหน่งปัจจุบัน</th>
-                                    <th class="p-5 text-right rounded-tr-2xl">จัดการตำแหน่ง</th>
-                                </tr>
-                            </thead>
-                            <tbody id="users-table-body" class="divide-y divide-slate-50 text-sm">
-                                <tr>
-                                    <td colspan="5" class="p-10 text-center text-slate-400 font-bold italic">
-                                        กำลังดึงข้อมูล...</td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <!-- Users Table -->
+            <div class="bg-white rounded-[40px] border border-slate-100 shadow-sm overflow-hidden p-8">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                    <h3 class="text-xl font-bold flex items-center gap-3 text-slate-800"><i
+                            class="fas fa-address-book text-brand-500"></i> รายชื่อผู้ใช้งานในระบบ</h3>
+                    <div class="relative w-full md:w-80 group">
+                        <i
+                            class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                        <input type="text" id="search-input" placeholder="ค้นหาชื่อ หรืออีเมล..."
+                            class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 transition-all font-medium text-sm"
+                            oninput="filterUsers()">
                     </div>
                 </div>
-            </div>
-
-            <!-- Medicines Tab -->
-            <div id="tab-medicines" class="tab-content hidden">
-                <div class="bg-white rounded-[40px] border border-slate-100 shadow-sm overflow-hidden p-8">
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-                        <h3 class="text-xl font-bold flex items-center gap-3 text-slate-800"><i
-                                class="fas fa-pills text-brand-500"></i> จัดการคลังยาและสินค้า</h3>
-                        <div class="flex items-center gap-3 w-full md:w-auto">
-                            <div class="relative flex-1 md:w-64 group">
-                                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" id="inv-search-input" placeholder="ค้นหาชื่อยา..."
-                                    class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-sm"
-                                    oninput="filterInventory()">
-                            </div>
-                            <button onclick="openInvModal()" class="px-6 py-2.5 bg-brand-600 text-white rounded-xl font-bold shadow-lg shadow-brand-500/30 hover:bg-brand-700 transition-all flex items-center gap-2 whitespace-nowrap">
-                                <i class="fas fa-plus"></i> เพิ่มยาใหม่
-                            </button>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 font-bold border-b border-slate-100">
-                                <tr>
-                                    <th class="p-5">Code</th>
-                                    <th class="p-5">รายการสินค้า</th>
-                                    <th class="p-5 text-center">คงเหลือ</th>
-                                    <th class="p-5 text-right">ต้นทุน</th>
-                                    <th class="p-5 text-right">ราคาขาย</th>
-                                    <th class="p-5 text-right rounded-tr-2xl">จัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="inventory-table-body" class="divide-y divide-slate-50 text-sm">
-                                <tr><td colspan="6" class="p-10 text-center text-slate-400 font-bold italic">กำลังดึงข้อมูลคลังยา...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead
+                            class="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400 font-bold border-b border-slate-100">
+                            <tr>
+                                <th class="p-5 rounded-tl-2xl">ID</th>
+                                <th class="p-5">อีเมล / ข้อมูลผู้ใช้</th>
+                                <th class="p-5">ชื่อ-นามสกุล</th>
+                                <th class="p-5">ตำแหน่งปัจจุบัน</th>
+                                <th class="p-5 text-right rounded-tr-2xl">จัดการตำแหน่ง</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body" class="divide-y divide-slate-50 text-sm">
+                            <tr>
+                                <td colspan="5" class="p-10 text-center text-slate-400 font-bold italic">
+                                    กำลังดึงข้อมูล...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -190,48 +146,37 @@
     </div>
 
     <!-- Modals -->
-    <!-- Inventory Modal -->
-    <div id="inventory-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-[40px] p-10 max-w-lg w-full shadow-2xl border-t-8 border-brand-500">
-            <h3 class="text-2xl font-black mb-1 text-slate-800" id="inv-modal-title">เพิ่มยาในคลัง</h3>
-            <p class="text-sm text-slate-400 mb-8">กรุณากรอกข้อมูลสินค้าให้ครบถ้วนเพื่อความถูกต้องของระบบบัญชี</p>
-            
-            <form id="inventory-form" class="space-y-5">
-                <input type="hidden" id="inv-id" />
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="col-span-2">
-                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">ชื่อสินค้า / ยา</label>
-                        <input type="text" id="inv-name" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm" placeholder="เช่น Paracetamol 500mg" required />
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">รหัสสินค้า (Item Code)</label>
-                        <input type="text" id="inv-code" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm" placeholder="เช่น MD-001" required />
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">จำนวนคงเหลือ</label>
-                        <input type="number" id="inv-stock" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm" placeholder="0" required />
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">ราคาต้นทุน (Cost)</label>
-                        <input type="number" step="0.01" id="inv-cost" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm" placeholder="0.00" required />
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">ราคาที่ขาย (Price)</label>
-                        <input type="number" step="0.01" id="inv-price" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm font-bold text-brand-600" placeholder="0.00" required />
-                    </div>
-                </div>
-                <div class="pt-4 flex gap-3">
-                    <button type="button" onclick="closeModal('inventory-modal')" class="flex-1 py-4 text-slate-400 font-bold hover:bg-slate-50 rounded-2xl">ยกเลิก</button>
-                    <button type="submit" class="flex-[2] py-4 bg-brand-600 text-white font-black rounded-2xl shadow-lg shadow-brand-500/20 hover:bg-brand-700 transition-all">บันทึกข้อมูล</button>
-                </div>
-            </form>
+    <div id="role-modal"
+        class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-[40px] p-10 max-w-sm w-full shadow-2xl border-t-8 border-brand-500 text-center">
+            <h3 class="text-xl font-black mb-2 text-slate-800">เปลี่ยนตำแหน่งพนักงาน</h3>
+            <p class="text-sm text-slate-500 mb-6" id="role-modal-name">User Name</p>
+
+            <input type="hidden" id="edit-user-id" />
+
+            <div class="grid grid-cols-1 gap-3 mb-6">
+                <button onclick="updateRole('vet')"
+                    class="py-4 bg-indigo-50 text-indigo-700 font-black rounded-2xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+                    <i class="fas fa-user-md mr-2"></i> สัตวแพทย์ (Vet)
+                </button>
+                <button onclick="updateRole('assistant')"
+                    class="py-4 bg-emerald-50 text-emerald-700 font-black rounded-2xl hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
+                    <i class="fas fa-user-nurse mr-2"></i> ผู้ช่วย (Assistant)
+                </button>
+                <button onclick="updateRole('customer')"
+                    class="py-4 bg-slate-50 text-slate-700 font-black rounded-2xl hover:bg-slate-800 hover:text-white transition-all shadow-sm">
+                    <i class="fas fa-user mr-2"></i> ลูกค้าทั่วไป (Customer)
+                </button>
+            </div>
+
+            <button onclick="closeModal('role-modal')"
+                class="w-full py-3 text-slate-400 font-bold hover:text-slate-800">ยกเลิก</button>
         </div>
     </div>
 
     <script src="/js/api.js"></script>
     <script>
         let allUsers = [];
-        let allInventory = [];
 
         (async function init() {
             const token = localStorage.getItem("token");
@@ -245,27 +190,10 @@
                     return;
                 }
                 loadUsers();
-                loadInventory();
             } catch (e) {
                 console.error(e);
             }
-
-            document.getElementById('inventory-form').onsubmit = saveInventory;
         })();
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('tab-' + tabId).classList.remove('hidden');
-
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-500/30');
-                el.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-white/5');
-            });
-
-            const activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-500/30');
-            activeBtn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-white/5');
-        }
 
         async function loadUsers() {
             try {
@@ -343,99 +271,6 @@
                 return name.includes(query) || email.includes(query) || username.includes(query);
             });
             renderUsers(filtered);
-        }
-
-        // --- Inventory Management ---
-
-        async function loadInventory() {
-            try {
-                allInventory = await VetApi.fetchInventory();
-                renderInventory(allInventory);
-            } catch (e) { console.error(e); }
-        }
-
-        function renderInventory(items) {
-            const tbody = document.getElementById('inventory-table-body');
-            tbody.innerHTML = items.map(i => `
-                <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="p-5 font-mono text-xs text-slate-400">#${i.item_code}</td>
-                    <td class="p-5">
-                        <div class="font-bold text-slate-800">${i.name}</div>
-                    </td>
-                    <td class="p-5 text-center">
-                        <span class="px-3 py-1 ${i.stock_quantity < 10 ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'} rounded-lg font-bold">
-                            ${i.stock_quantity}
-                        </span>
-                    </td>
-                    <td class="p-5 text-right font-medium text-slate-500">฿${i.cost_price?.toLocaleString() || '0.00'}</td>
-                    <td class="p-5 text-right font-black text-brand-600">฿${i.price?.toLocaleString() || '0.00'}</td>
-                    <td class="p-5 text-right">
-                        <div class="flex justify-end gap-2">
-                            <button onclick="openInvModal(${JSON.stringify(i).replace(/"/g, '&quot;')})" class="w-9 h-9 flex items-center justify-center bg-slate-100 text-slate-500 rounded-xl hover:bg-brand-500 hover:text-white transition-all shadow-sm">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="deleteInventory(${i.id})" class="w-9 h-9 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('') || '<tr><td colspan="6" class="p-10 text-center text-slate-300 italic">ไม่มีข้อมูลสินค้าในคลัง</td></tr>';
-        }
-
-        function filterInventory() {
-            const query = document.getElementById('inv-search-input').value.toLowerCase().trim();
-            const filtered = allInventory.filter(i => 
-                i.name.toLowerCase().includes(query) || i.item_code.toLowerCase().includes(query)
-            );
-            renderInventory(filtered);
-        }
-
-        function openInvModal(item = null) {
-            document.getElementById('inventory-form').reset();
-            if (item) {
-                document.getElementById('inv-modal-title').textContent = "แก้ไขข้อมูลสินค้า";
-                document.getElementById('inv-id').value = item.id;
-                document.getElementById('inv-name').value = item.name;
-                document.getElementById('inv-code').value = item.item_code;
-                document.getElementById('inv-stock').value = item.stock_quantity;
-                document.getElementById('inv-cost').value = item.cost_price;
-                document.getElementById('inv-price').value = item.price;
-            } else {
-                document.getElementById('inv-modal-title').textContent = "เพิ่มยาในคลัง";
-                document.getElementById('inv-id').value = "";
-            }
-            document.getElementById('inventory-modal').classList.remove('hidden');
-        }
-
-        async function saveInventory(e) {
-            e.preventDefault();
-            const id = document.getElementById('inv-id').value;
-            const payload = {
-                name: document.getElementById('inv-name').value,
-                item_code: document.getElementById('inv-code').value,
-                stock_quantity: document.getElementById('inv-stock').value,
-                cost_price: document.getElementById('inv-cost').value,
-                price: document.getElementById('inv-price').value
-            };
-
-            try {
-                if (id) {
-                    await VetApi.updateInventory(id, payload);
-                } else {
-                    await VetApi.createInventory(payload);
-                }
-                closeModal('inventory-modal');
-                loadInventory();
-            } catch (e) { alert("Error: " + e.message); }
-        }
-
-        async function deleteInventory(id) {
-            if (!confirm("ยืนยันการลบรายการนี้? การลบจะส่งผลถาวรในฐานข้อมูล SQL")) return;
-            try {
-                await VetApi.deleteInventory(id);
-                loadInventory();
-            } catch (e) { alert(e.message); }
         }
 
         function openRoleModal(id, name) {
