@@ -103,6 +103,18 @@ class UserManagementView(APIView):
         except User.DoesNotExist:
             return Response({"detail": "ไม่พบผู้ใช้"}, status=status.HTTP_404_NOT_FOUND)
 
+    def delete(self, request, pk):
+        # Delete user account
+        from django.contrib.auth.models import User
+        try:
+            user = User.objects.get(pk=pk)
+            if user == request.user:
+                return Response({"detail": "ไม่สามารถลบตัวเองได้"}, status=status.HTTP_400_BAD_REQUEST)
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except User.DoesNotExist:
+            return Response({"detail": "ไม่พบผู้ใช้"}, status=status.HTTP_404_NOT_FOUND)
+
 
 class BookAppointmentView(APIView):
     permission_classes = [IsAuthenticated]
