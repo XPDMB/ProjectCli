@@ -522,7 +522,7 @@
         </div>
     </div>
 
-    <script src="/js/api.js"></script>
+    <script src="/js/api.js?v=2"></script>
     <script src="/js/main.js"></script>
     <script>
         let allAppointments = [];
@@ -563,6 +563,10 @@
         async function loadAppointments() {
             try {
                 allAppointments = await VetApi.fetchAppointments();
+                
+                // เรียงตามวันที่/เวลาล่าสุดขึ้นก่อน
+                allAppointments.sort((a, b) => new Date(b.scheduled_at) - new Date(a.scheduled_at));
+
                 const list = document.getElementById('appt-rows');
                 list.innerHTML = allAppointments.map(a => `
                     <tr class="hover:bg-teal-50 group transition-all cursor-pointer" onclick="selectAppt('${a.id}')">
@@ -586,12 +590,27 @@
                             </div>
                         </td>
                     </tr>
-                `).join('') || '<tr><td colspan="5" class="p-20 text-center text-slate-300 italic">No appointments today.</td></tr>';
+                `).join('') || '<tr><td colspan="5" class="p-20 text-center text-slate-300 italic">ไม่มีนัดหมาย</td></tr>';
                 document.getElementById('stat-appt').textContent = allAppointments.filter(a => a.status === 'pending').length;
                 
-                const sel = document.getElementById('appt_sel');
-                sel.innerHTML = '<option value="">— เลือกคิวที่กำลังตรวจ —</option>' + 
-                    allAppointments.map(a => `<option value="${a.id}">${a.pet_name} (${new Date(a.scheduled_at).toLocaleTimeString()})</option>`).join('');
+                // Dropdown: แสดงเฉพาะคิวที่ยังไม่ได้รับการรักษา
+                try {
+                    const records = await VetApi.fetchMedicalRecords();
+                    const treatedApptIds = records.map(r => r.appointment);
+                    const untreated = allAppointments.filter(a => !treatedApptIds.includes(a.id));
+                    
+                    // เรียง untreated ตามเวลาล่าสุดก่อน
+                    untreated.sort((a, b) => new Date(b.scheduled_at) - new Date(a.scheduled_at));
+
+                    const sel = document.getElementById('appt_sel');
+                    sel.innerHTML = '<option value="">— เลือกคิวที่กำลังตรวจ —</option>' + 
+                        untreated.map(a => `<option value="${a.id}">${a.pet_name} (${new Date(a.scheduled_at).toLocaleString([], {dateStyle:'short', timeStyle:'short'})})</option>`).join('');
+                } catch(e) {
+                    // Fallback: แสดงทั้งหมดถ้าดึง medical records ไม่ได้
+                    const sel = document.getElementById('appt_sel');
+                    sel.innerHTML = '<option value="">— เลือกคิวที่กำลังตรวจ —</option>' + 
+                        allAppointments.map(a => `<option value="${a.id}">${a.pet_name} (${new Date(a.scheduled_at).toLocaleTimeString()})</option>`).join('');
+                }
             } catch(e){}
         }
 
