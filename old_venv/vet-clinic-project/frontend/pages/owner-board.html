@@ -218,6 +218,9 @@
                               <div class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">${p.species} ${p.breed ? '• '+p.breed : ''}</div>
                           </div>
                       </div>
+                      <button onclick="deletePet('${p.id}')" class="w-9 h-9 bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all flex items-center justify-center" title="ลบสัตว์เลี้ยงนี้">
+                          <i class="fas fa-trash-alt text-sm"></i>
+                      </button>
                   </div>
               `).join('');
 
@@ -304,6 +307,15 @@
           if (!confirm('ยืนยันการลบนัดหมายนี้? ข้อมูลจะถูกลบออกจากระบบ')) return;
           try {
               await VetApi.deleteAppointment(id);
+              loadHistory();
+          } catch(err) { alert('เกิดข้อผิดพลาด: ' + err.message); }
+      }
+
+      async function deletePet(id) {
+          if (!confirm('ยืนยันการลบสัตว์เลี้ยงนี้? ข้อมูลจะถูกลบออกจากระบบถาวร')) return;
+          try {
+              await VetApi.deletePet(id);
+              loadPets();
               loadHistory();
           } catch(err) { alert('เกิดข้อผิดพลาด: ' + err.message); }
       }

@@ -118,6 +118,10 @@
       return apiFetch("/pets/", { method: "POST", body: JSON.stringify(body) });
     },
 
+    deletePet: function (id) {
+      return apiFetch("/pets/" + id + "/", { method: "DELETE" });
+    },
+
     bookAppointment: function (payload) {
       return apiFetch("/book-appointment/", {
         method: "POST",
