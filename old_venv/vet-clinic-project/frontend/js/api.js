@@ -154,6 +154,20 @@
       return apiFetch("/inventory/");
     },
 
+    createInventory: function (body) {
+      return apiFetch("/inventory/", {
+        method: "POST",
+        body: JSON.stringify(body),
+      });
+    },
+
+    updateInventory: function (id, body) {
+      return apiFetch("/inventory/" + id + "/", {
+        method: "PATCH", // Use PATCH for partial updates
+        body: JSON.stringify(body),
+      });
+    },
+
     deleteInventory: function (id) {
       return apiFetch("/inventory/" + id + "/", {
         method: "DELETE",

@@ -220,6 +220,12 @@
 
             <!-- Inventory Section -->
             <section id="tab-inventory" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-800"><i class="fas fa-box-open mr-2 text-teal-600"></i> รายการยาและเวชภัณฑ์ในคลัง</h3>
+                    <button onclick="openInvModal()" class="px-6 py-3 bg-teal-600 text-white rounded-2xl font-bold shadow-lg shadow-teal-500/20 hover:bg-teal-700 transition-all">
+                        <i class="fas fa-plus-circle mr-2"></i> เพิ่มยาใหม่
+                    </button>
+                </div>
                 <div class="bg-white rounded-[32px] shadow-sm border border-slate-100 overflow-hidden">
                     <table class="w-full text-left">
                         <thead class="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b border-slate-100">
@@ -466,6 +472,43 @@
         </div>
     </div>
 
+    <div id="inventory-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-[40px] p-10 max-w-lg w-full shadow-2xl border-t-8 border-teal-500">
+            <h3 class="text-2xl font-black mb-1 text-slate-800" id="inv-modal-title">เพิ่มข้อมูลยา</h3>
+            <p class="text-xs text-slate-400 mb-8">บันทึกข้อมูลเข้าสู่ฐานข้อมูล SSMS ระบบจะคำนวณต้นทุนให้อัตโนมัติ</p>
+            
+            <form id="inv-form" class="space-y-4">
+                <input type="hidden" id="inv-id" />
+                <div>
+                    <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">ชื่อยา / สินค้า</label>
+                    <input type="text" id="inv-name" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm" placeholder="Medicine Name" required />
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">รหัสสินค้า</label>
+                        <input type="text" id="inv-code" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm font-mono" placeholder="MED-001" required />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">จำนวนในคลัง</label>
+                        <input type="number" id="inv-stock" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm" placeholder="0" required />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">ราคาทุน</label>
+                        <input type="number" step="0.01" id="inv-cost" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm" placeholder="0.00" required />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-1">ราคาขาย</label>
+                        <input type="number" step="0.01" id="inv-price" class="w-full rounded-2xl border-slate-100 p-4 bg-slate-50 focus:bg-white text-sm font-bold text-teal-600" placeholder="0.00" required />
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal('inventory-modal')" class="flex-1 py-4 text-slate-400 font-bold">ยกเลิก</button>
+                    <button type="submit" class="flex-[2] py-4 bg-teal-600 text-white font-black rounded-2xl shadow-lg shadow-teal-500/20 hover:bg-teal-700 transition-all">บันทึกข้อมูล SQL</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="/js/api.js"></script>
     <script src="/js/main.js"></script>
     <script>
@@ -497,6 +540,7 @@
             document.getElementById("add-rx").onclick = addRxRow;
             document.getElementById("med-form").onsubmit = handleMedSubmit;
             document.getElementById("shift-f").onsubmit = handleShiftSubmit;
+            document.getElementById("inv-form").onsubmit = handleInventorySubmit;
 
             loadAppointments();
             loadInventory();
@@ -549,16 +593,61 @@
                         <td class="p-6 text-center">
                             <span class="${i.stock_quantity < 10 ? 'text-red-500 bg-red-50' : 'text-slate-800 bg-slate-50'} font-black px-3 py-1 rounded-lg">${i.stock_quantity}</span>
                         </td>
-                        <td class="p-6 text-right text-red-400 font-bold">฿${i.cost_price || '0.00'}</td>
-                        <td class="p-6 text-right text-teal-600 font-black">฿${i.price}</td>
+                        <td class="p-6 text-right text-red-400 font-bold">฿${parseFloat(i.cost_price || 0).toLocaleString()}</td>
+                        <td class="p-6 text-right text-teal-600 font-black">฿${parseFloat(i.price || 0).toLocaleString()}</td>
                         <td class="p-6 text-right">
-                            <button onclick="deleteInv('${i.id}', event)" class="w-8 h-8 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all" title="ลบออกจากฐานข้อมูล SQL">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            <div class="flex justify-end gap-2">
+                                <button onclick="openInvModal(${JSON.stringify(i).replace(/"/g, '&quot;')})" class="w-8 h-8 bg-slate-50 text-slate-400 rounded-lg hover:bg-teal-500 hover:text-white transition-all" title="แก้ไข">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteInv('${i.id}', event)" class="w-8 h-8 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all" title="ลบออกจากฐานข้อมูล SQL">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `).join('');
             } catch(e){}
+        }
+
+        function openInvModal(item = null) {
+            const form = document.getElementById('inv-form');
+            form.reset();
+            if (item) {
+                document.getElementById('inv-modal-title').textContent = "แก้ไขข้อมูลยา";
+                document.getElementById('inv-id').value = item.id;
+                document.getElementById('inv-name').value = item.name;
+                document.getElementById('inv-code').value = item.item_code;
+                document.getElementById('inv-stock').value = item.stock_quantity;
+                document.getElementById('inv-cost').value = item.cost_price;
+                document.getElementById('inv-price').value = item.price;
+            } else {
+                document.getElementById('inv-modal-title').textContent = "เพิ่มข้อมูลยาใหม่";
+                document.getElementById('inv-id').value = "";
+            }
+            document.getElementById('inventory-modal').classList.remove('hidden');
+        }
+
+        async function handleInventorySubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('inv-id').value;
+            const payload = {
+                name: document.getElementById('inv-name').value,
+                item_code: document.getElementById('inv-code').value,
+                stock_quantity: document.getElementById('inv-stock').value,
+                cost_price: document.getElementById('inv-cost').value,
+                price: document.getElementById('inv-price').value
+            };
+
+            try {
+                if (id) {
+                    await VetApi.updateInventory(id, payload);
+                } else {
+                    await VetApi.createInventory(payload);
+                }
+                closeModal('inventory-modal');
+                loadInventory();
+            } catch(err) { alert(err.message); }
         }
 
         async function loadFinance() {
