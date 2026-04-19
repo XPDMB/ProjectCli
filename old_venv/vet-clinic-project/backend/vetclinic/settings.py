@@ -76,30 +76,14 @@ TEMPLATES = [
 WSGI_APPLICATION = "vetclinic.wsgi.application"
 
 # ──────────────────────────────────────────────
-# ฐานข้อมูล
+# ฐานข้อมูล (กลับมาใช้ SQLite ตามคำขอ)
 # ──────────────────────────────────────────────
-def _use_sql_server():
-    return os.environ.get("USE_SQL_SERVER", "0").lower() in ("1", "true", "yes")
-
-if _use_sql_server():
-    DATABASES = {
-        "default": {
-            "ENGINE": "mssql",
-            "NAME": os.environ.get("DB_NAME", "VetClinicDB"),
-            "HOST": os.environ.get("DB_HOST", r"localhost\SQLEXPRESS"),
-            "OPTIONS": {
-                "driver": "ODBC Driver 17 for SQL Server",
-                "extra_params": "Trusted_Connection=yes;TrustServerCertificate=yes;"
-            },
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [

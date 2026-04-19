@@ -53,8 +53,16 @@
             <div class="absolute -right-20 -top-20 opacity-10"><i class="fas fa-cat text-[250px]"></i></div>
             <h2 class="text-4xl md:text-5xl font-black mb-4">ยินดีต้อนรับ, <span id="user-display" class="text-teal-100 underline decoration-teal-400 decoration-4 underline-offset-8">คุณลูกค้า</span></h2>
             <p class="text-teal-50 text-lg max-w-2xl font-light">ดูแลสัตว์เลี้ยงของคุณให้มีสุขภาพดีไปกับเรา คุณสามารถจัดการประวัติสัตว์เลี้ยง และดูข้อมูลคิวนัดหมายทั้งหมดได้ที่นี่</p>
-            <div class="mt-8 flex gap-4">
+            <div class="mt-8 flex flex-wrap gap-4">
                  <button onclick="document.getElementById('booking-section').scrollIntoView({behavior: 'smooth'})" class="px-8 py-4 bg-white text-teal-600 rounded-2xl font-black shadow-lg hover:scale-105 transition-transform"><i class="fas fa-calendar-plus mr-2"></i> จองคิวรักษาด่วน</button>
+                 
+                 <div class="bg-white/10 backdrop-blur-md px-8 py-3 rounded-2xl border border-white/20 flex items-center gap-4">
+                      <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl text-white"><i class="fas fa-paw"></i></div>
+                      <div>
+                          <p class="text-[10px] font-black uppercase text-teal-100 opacity-80 leading-none mb-1">สัตว์เลี้ยงในความดูแล</p>
+                          <p class="text-2xl font-black leading-none"><span id="hero-pet-count">0</span> ตัว</p>
+                      </div>
+                 </div>
             </div>
         </header>
 
@@ -62,7 +70,10 @@
             <!-- Left Column: Pets -->
             <div class="lg:col-span-1 space-y-6">
                 <div class="flex justify-between items-end mb-2 px-2">
-                     <h3 class="text-2xl font-black text-slate-800">สัตว์เลี้ยงของฉัน</h3>
+                     <h3 class="text-2xl font-black text-slate-800 flex items-center">
+                         สัตว์เลี้ยงของฉัน
+                         <span id="pet-count" class="ml-3 px-4 py-1 bg-teal-100 text-teal-600 rounded-full text-sm font-black ring-4 ring-teal-50/50">0</span>
+                     </h3>
                 </div>
 
                 <div id="pets-list" class="space-y-4">
@@ -196,6 +207,11 @@
       async function loadPets() {
           try {
               userPets = await VetApi.fetchPets();
+              const count = userPets.length;
+              document.getElementById("pet-count").textContent = count;
+              if (document.getElementById("hero-pet-count")) {
+                  document.getElementById("hero-pet-count").textContent = count;
+              }
               const list = document.getElementById("pets-list");
               const select = document.getElementById("b_pet");
               
